@@ -13,9 +13,13 @@
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.5",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "redux-saga": "^1.2.2",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11",
+    "yup-es": "^1.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
