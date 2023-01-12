@@ -1,5 +1,6 @@
 import { Modal } from 'bootstrap';
 import ModalButton from '../../components/Modal/ModalButton';
+import ModalB from '../../components/ModalB/ModalB';
 
 export default function HomePage() {
   //modal Delete footer
@@ -55,6 +56,9 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+      <div>
+        <ModalB/>
+      </div>
       <div className="row row-cols-md-3">
         <div className="col py-3">
           <div className="card">
@@ -74,15 +78,10 @@ export default function HomePage() {
                 <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                 <ul className="dropdown-menu">
                   <li>
-                    <ModalButton targetId="note" className="dropdown-item">
-                      Editar
-                    </ModalButton>
+                    Editar
                   </li>
                   <li>
-                    <ModalButton targetId="noteDeleteModal" className="dropdown-item">
-                      Eliminar
-                    </ModalButton>
-                  
+                    Eliminar
                   </li>
                 </ul>
               </div>
