@@ -1,6 +1,7 @@
 export default function TagsPage () {
     return(
-    <div>
+    <div className="py-3">
+        <h3>Mis Etiquetas</h3>
         <table className="table table-striped">
             <thead>
                 <tr>

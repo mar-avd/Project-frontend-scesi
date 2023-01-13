@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function SideBar(){
-    let isActive = '';
+export default function SideBar({sideBarOptions}){
+    let location = useLocation();
     return(
         <div>
-            <div className="col-3 container">
-            <div className="d-flex flex-column flex-shrink-0 p-2 text-bg-secondary">
+            <div className=" container">
+            <div className="d-flex flex-column flex-shrink-0 p-2 text-bg-dark">
               <a
                 href="/"
                 className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
@@ -14,26 +14,13 @@ export default function SideBar(){
               </a>
               <hr />
               <ul className="nav nav-pills flex-column mb-auto">
-                <li className="nav-item">
-                  <Link className="nav-link active" to='/'>
-                    Mis notas
-                  </Link>
-                </li>
-                <li>
-                  <Link to="mis-etiquetas" className="nav-link text-white">
-                    Etiquetas
-                  </Link>
-                </li>
-                <li>
-                  <Link to="archivados" className="nav-link text-white">
-                    Archivados
-                  </Link>
-                </li>
-                <li>
-                  <Link to='papelera' className="nav-link text-white">
-                    Papelera
-                  </Link>
-                </li>
+                {sideBarOptions.map((sideBarOption, index) => (
+                    <li className="nav-item" key={index}>
+                    <Link className={"nav-link " + (sideBarOption.to===location.pathname ? 'active' : '')} to={sideBarOption.to}>
+                        <i className={sideBarOption.icon}></i> {sideBarOption.option}
+                    </Link>
+                    </li>
+                ))}
               </ul>
               <hr />
               <div className="dropdown">

@@ -8,11 +8,21 @@ import TrashPage from './pages/TrashPage/TrashPage';
 import SideBar from './components/SideBar/SideBar';
 
 function App() {
+  //options
+  let sideBarOptions = [
+    {option: 'Mis notas', icon:'bi bi-grid-fill', to:'/'},
+    {option: 'Etiquetas', icon:'bi bi-bookmarks-fill', to:'/mis-etiquetas'},
+    {option: 'Archivados', icon:'bi bi-archive-fill', to:'/archivados'},
+    {option: 'Papelera', icon:'bi bi-trash-fill', to:'/papelera'},
+  ]
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
         <div className="row">
-          <SideBar/>
+          <div className='col-3'>
+          <SideBar sideBarOptions={sideBarOptions}/>
+
+          </div>
           <div className="col-9">
             <nav className="navbar navbar-expand-sm bg-light">
               <div className="container-fluid">
