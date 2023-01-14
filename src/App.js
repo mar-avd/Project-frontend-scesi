@@ -1,5 +1,6 @@
 //import './App.css';
 import './assets/scss/stylesheet.scss';
+import Boot from './redux/boot';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
 import TagsPage from './pages/TagsPage/TagsPage';
@@ -62,5 +63,8 @@ function App() {
     </BrowserRouter>
   );
 }
+Boot()
+  .then(() => App())
+  .catch((error) => console.error(error));
 
 export default App;

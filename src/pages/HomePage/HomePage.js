@@ -24,26 +24,26 @@ export default function HomePage() {
             <button
               className="btn btn-outline-primary dropdown-toggle"
               type="button"
-              data-bs-toggle="dropdown"
+              data-bs-toggle="dropdown-order"
               aria-expanded="false"
             >
               Ordenar por
             </button>
             <ul className="dropdown-menu">
               <li>
-                <a className="dropdown-item" href="#">
+                <button className="dropdown-item" href="/">
                   Action
-                </a>
+                </button>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <button className="dropdown-item" href="/">
                   Another action
-                </a>
+                </button>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <button className="dropdown-item" href="/">
                   Something else here
-                </a>
+                </button>
               </li>
             </ul>
           </div>
