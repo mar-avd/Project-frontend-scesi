@@ -1,64 +1,26 @@
-import { Modal } from 'bootstrap';
-import ModalButton from '../../components/Modal/ModalButton';
-import ModalB from '../../components/ModalB/ModalB';
+import AddModal from '../../components/AddModal/AddModal';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 export default function HomePage() {
-  //modal Delete footer
-  const modalFooter = (
-    <>
-      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-        Cerrar
-      </button>
-      <button type="button" className="btn btn-primary">
-        Eliminar Producto
-      </button>
-    </>
-  );
-
   //render
   return (
     <div className="container-fluid">
       <div className="row justify-content-between py-3">
         <div className="col-2">
-          <div className="dropdown">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown-order"
-              aria-expanded="false"
-            >
-              Ordenar por
-            </button>
-            <ul className="dropdown-menu">
-              <li>
-                <button className="dropdown-item" href="/">
-                  Action
-                </button>
-              </li>
-              <li>
-                <button className="dropdown-item" href="/">
-                  Another action
-                </button>
-              </li>
-              <li>
-                <button className="dropdown-item" href="/">
-                  Something else here
-                </button>
-              </li>
-            </ul>
-          </div>
+          <DropdownButton variant="outline-primary" id="dropdown-item-button" title="Ordenar por">
+            <Dropdown.Item as="button">Fecha de creación</Dropdown.Item>
+            <Dropdown.Item as="button">Última modificación</Dropdown.Item>
+            <Dropdown.Item as="button">Something else</Dropdown.Item>
+          </DropdownButton>
         </div>
         <div className="col-2">
           <div className="text-end">
-            <button className="btn">
-              <i className="bi bi-plus-circle-fill"></i>
-            </button>
+            <AddModal />
           </div>
         </div>
       </div>
-      <div>
-        <ModalB/>
-      </div>
+
       <div className="row row-cols-md-3">
         <div className="col py-3">
           <div className="card">
@@ -77,12 +39,8 @@ export default function HomePage() {
               <div className="dropdown">
                 <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                 <ul className="dropdown-menu">
-                  <li>
-                    Editar
-                  </li>
-                  <li>
-                    Eliminar
-                  </li>
+                  <li>Editar</li>
+                  <li>Eliminar</li>
                 </ul>
               </div>
             </div>
