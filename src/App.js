@@ -7,6 +7,7 @@ import TagsPage from './pages/TagsPage/TagsPage';
 import ArchivePage from './pages/ArchivePage/ArchivePage';
 import TrashPage from './pages/TrashPage/TrashPage';
 import SideBar from './components/SideBar/SideBar';
+import Login from './pages/Login/Login';
 
 function App() {
   //options
@@ -53,6 +54,7 @@ function App() {
             </nav>
             <Routes>
               <Route index element={<HomePage />} />
+              <Route path='login' element={<Login/>}/>
               <Route path="mis-etiquetas" element={<TagsPage />} />
               <Route path="archivados" element={<ArchivePage />} />
               <Route path="papelera" element={<TrashPage />} />
