@@ -6,27 +6,28 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 const schema = yup
-.object({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
-})
-.required();
-export default function RegisterModal(){
+  .object({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  })
+  .required();
+export default function RegisterModal() {
   //form
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-    const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false);
   //handlers
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleRegister = () => {};
-  
+
   //render
-    return(<span className=''>
-        <Button variant='secondary' onClick={handleShow}>
+  return (
+    <span className="">
+      <Button variant="secondary" onClick={handleShow}>
         Registrarse
       </Button>
       <Modal show={show} onHide={handleClose}>
@@ -35,15 +36,22 @@ export default function RegisterModal(){
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit(handleRegister)}>
-            <div className='mb-3'>
-              <label className='form-label'>Email</label>
-              <input type='email' className='form-control' {...register('email', { required: true })}/>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                {...register('email', { required: true })}
+              />
             </div>
-            <div className='mb-3'>
-              <label className='form-label'>Contraseña</label>
-              <input type='password' className='form-control' {...register('password', {required: true})}/>
+            <div className="mb-3">
+              <label className="form-label">Contraseña</label>
+              <input
+                type="password"
+                className="form-control"
+                {...register('password', { required: true })}
+              />
             </div>
-
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -55,5 +63,6 @@ export default function RegisterModal(){
           </Button>
         </Modal.Footer>
       </Modal>
-    </span>)
+    </span>
+  );
 }

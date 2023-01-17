@@ -1,8 +1,22 @@
 import AddModal from '../../components/AddModal/AddModal';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { useEffect, useState } from 'react';
+import { api } from '../../config/site.config';
+import EditNoteModal from '../../components/EditNoteModal/EditNoteModal';
+import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
+import NoteModal from '../../components/NoteModal/NoteModal';
 
 export default function HomePage() {
+  //states
+  const [notes, setNotes] = useState([]);
+  //init
+  useEffect(() => {
+    /*api.get('note').then((response) => {
+      console.log(response.data);
+      //setNotes(response.data);
+    }).catch((error) => console.log(error))*/
+  }, [])
   //render
   return (
     <div className="container-fluid">
@@ -11,7 +25,7 @@ export default function HomePage() {
           <DropdownButton variant="outline-primary" id="dropdown-item-button" title="Ordenar por">
             <Dropdown.Item as="button">Fecha de creación</Dropdown.Item>
             <Dropdown.Item as="button">Última modificación</Dropdown.Item>
-            <Dropdown.Item as="button">Something else</Dropdown.Item>
+            <Dropdown.Item as="button">Etiquetas</Dropdown.Item>
           </DropdownButton>
         </div>
         <div className="col-2">
@@ -39,8 +53,9 @@ export default function HomePage() {
               <div className="dropdown">
                 <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                 <ul className="dropdown-menu">
-                  <li>Editar</li>
-                  <li>Eliminar</li>
+                  <li><NoteModal/></li>
+                  <li><EditNoteModal/></li>
+                  <li><DeleteNoteModal/></li>
                 </ul>
               </div>
             </div>
