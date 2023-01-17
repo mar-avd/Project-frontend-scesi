@@ -25,7 +25,7 @@ export default function SideBar({sideBarOptions}){
               <hr />
               <div className="dropdown">
                 <a
-                  href="#"
+                  href="/"
                   className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
