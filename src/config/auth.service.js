@@ -18,8 +18,8 @@ class AuthService {
    */
   login(user) {
     return api
-      .post('auth/login', {
-        email: user.email,
+      .post('auth/singIn', {
+        username: user.username,
         password: user.password,
       })
       .then((response) => {
