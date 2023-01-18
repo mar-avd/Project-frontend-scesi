@@ -1,7 +1,7 @@
 import { api } from './site.config';
 import { storageDelete, storageGet } from '../services/storage';
 import { createBrowserHistory } from 'history';
-
+import Axios from 'axios';
 const history = createBrowserHistory();
 
 /**
@@ -23,6 +23,7 @@ class AuthService {
         password: user.password,
       })
       .then((response) => {
+        console.log(response.data)
         return response.data;
       });
   }

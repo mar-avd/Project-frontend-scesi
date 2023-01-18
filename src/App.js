@@ -8,22 +8,25 @@ import ArchivePage from './pages/ArchivePage/ArchivePage';
 import TrashPage from './pages/TrashPage/TrashPage';
 import SideBar from './components/SideBar/SideBar';
 import Login from './pages/Login/Login';
+import PrivateRoute from './utility/PrivateRoute';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const isLoggedIn = useSelector((state) => state.Auth.idToken)
   //options
   let sideBarOptions = [
-    {option: 'Mis notas', icon:'bi bi-grid-fill', to:'/'},
-    {option: 'Etiquetas', icon:'bi bi-bookmarks-fill', to:'/mis-etiquetas'},
-    {option: 'Archivados', icon:'bi bi-archive-fill', to:'/archivados'},
-    {option: 'Papelera', icon:'bi bi-trash-fill', to:'/papelera'},
-  ]
+    { option: 'Mis notas', icon: 'bi bi-grid-fill', to: '/' },
+    { option: 'Etiquetas', icon: 'bi bi-bookmarks-fill', to: '/mis-etiquetas' },
+    { option: 'Archivados', icon: 'bi bi-archive-fill', to: '/archivados' },
+    { option: 'Papelera', icon: 'bi bi-trash-fill', to: '/papelera' },
+  ];
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
         <div className="row">
-          <div className='col-3'>
-          <SideBar sideBarOptions={sideBarOptions}/>
-
+          <div className="col-3">
+            {isLoggedIn ? (<SideBar sideBarOptions={sideBarOptions} />) : ('Iniciar sesión')}
+            
           </div>
           <div className="col-9">
             <nav className="navbar navbar-expand-sm bg-light">
@@ -54,10 +57,17 @@ function App() {
             </nav>
             <Routes>
               <Route index element={<HomePage />} />
-              <Route path='login' element={<Login/>}/>
+              <Route path="login" element={<Login />} />
               <Route path="mis-etiquetas" element={<TagsPage />} />
               <Route path="archivados" element={<ArchivePage />} />
-              <Route path="papelera" element={<TrashPage />} />
+              <Route
+                path="papelera"
+                element={
+                  <PrivateRoute>
+                    <TrashPage />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </div>
         </div>

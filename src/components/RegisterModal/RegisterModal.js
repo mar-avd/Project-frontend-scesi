@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import './RegisterModal.css';
 
 const schema = yup
   .object({
@@ -27,8 +28,8 @@ export default function RegisterModal() {
   //render
   return (
     <span className="">
-      <Button variant="secondary" onClick={handleShow}>
-        Registrarse
+        <Button className='BotonSignUp' variant='secondary' onClick={handleShow}>
+        Sign Up
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
