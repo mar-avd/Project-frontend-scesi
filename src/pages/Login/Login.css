@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Jaldi:wght@700&display=swap');
+
+.bodyLogin {
+    background-image: url(img/fondo.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    /* display: flex; */
+    justify-content: center;  
+}
+
+.form {
+    background: rgba(217, 217, 217, 0.4);
+    padding: 100px;
+    width: 900px;
+    border-radius: 5px;
+}
+
+.titulo{
+    font-family: 'Jaldi', sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+
+.entradas {
+    width: 486px;
+    display: inline-block;
+    justify-content: center;    
+}
+
+.entradaEmail {
+    margin-top: 35px;
+    padding: 6px;
+    background-color: #F9ECEC;
+}
+
+.entradaContra {
+    margin-top: 15px;
+    padding: 6px;
+    background-color: #F9ECEC;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    padding: 35px;
+}
+
+.BotonSignUp {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-radius: 5px;
+
+    padding: 5px;
+    width: 243px;
+}
+
+.BotonLogin{
+    background-color: #9BA0AE;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 0px;
+    
+    padding: 5px;
+    width: 243px;
+}
