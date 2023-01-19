@@ -1,7 +1,6 @@
 import { api } from './site.config';
 import { storageDelete, storageGet } from '../services/storage';
 import { createBrowserHistory } from 'history';
-import Axios from 'axios';
 const history = createBrowserHistory();
 
 /**

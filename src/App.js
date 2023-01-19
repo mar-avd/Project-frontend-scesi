@@ -23,10 +23,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
-        <div className="row">
+        {isLoggedIn ? (<div className="row">
           <div className="col-3">
-            {isLoggedIn ? (<SideBar sideBarOptions={sideBarOptions} />) : ('Iniciar sesión')}
-            
+            <SideBar sideBarOptions={sideBarOptions} />            
           </div>
           <div className="col-9">
             <nav className="navbar navbar-expand-sm bg-light">
@@ -56,10 +55,23 @@ function App() {
               </div>
             </nav>
             <Routes>
-              <Route index element={<HomePage />} />
+              <Route index element={<PrivateRoute>
+                
+                <HomePage />
+              </PrivateRoute>
+              } />
               <Route path="login" element={<Login />} />
-              <Route path="mis-etiquetas" element={<TagsPage />} />
-              <Route path="archivados" element={<ArchivePage />} />
+              <Route path="mis-etiquetas" element={<PrivateRoute>
+
+                <TagsPage />
+              </PrivateRoute>
+              } />
+              <Route path="archivados" element={
+              <PrivateRoute>
+
+                <ArchivePage />
+              </PrivateRoute>
+              } />
               <Route
                 path="papelera"
                 element={
@@ -70,7 +82,8 @@ function App() {
               />
             </Routes>
           </div>
-        </div>
+        </div>) : (<Login/>)}
+        
       </div>
     </BrowserRouter>
   );

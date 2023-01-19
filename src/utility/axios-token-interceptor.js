@@ -7,6 +7,7 @@ const history = createBrowserHistory();
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    console.log("aqui")
     const user = AuthService.getCurrentUser();
     if (user.token != null) {
       config.headers.Authorization = `Bearer ${user.token}`;

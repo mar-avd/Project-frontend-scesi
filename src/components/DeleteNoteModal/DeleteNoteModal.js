@@ -20,7 +20,7 @@ export default function DeleteNoteModal({idNote}){
           <Modal.Title>Eliminar</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Estás seguro de eliminar esta nota?</p>
+          <p>Estás seguro de eliminar esta nota? {idNote}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

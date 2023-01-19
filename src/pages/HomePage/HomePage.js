@@ -6,17 +6,25 @@ import { api } from '../../config/site.config';
 import EditNoteModal from '../../components/EditNoteModal/EditNoteModal';
 import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
 import NoteModal from '../../components/NoteModal/NoteModal';
+import AuthService from '../../config/auth.service';
 
 export default function HomePage() {
   //states
   const [notes, setNotes] = useState([]);
   //init
   useEffect(() => {
-    /*api.get('note').then((response) => {
-      console.log(response.data);
-      //setNotes(response.data);
-    }).catch((error) => console.log(error))*/
-  }, [])
+    const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
+    api
+      .get('note', config)
+      .then((response) => {
+        console.log(response.data);
+        setNotes(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   //render
   return (
     <div className="container-fluid">
@@ -36,99 +44,40 @@ export default function HomePage() {
       </div>
 
       <div className="row row-cols-md-3">
-        <div className="col py-3">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Titulo</h3>
-            </div>
-            <div className="card-body">
-              <p className="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam perferendis
-                voluptas itaque sed maiores saepe, nulla vel eaque vero. Facere consectetur, laborum
-                doloremque eos deserunt voluptates autem accusamus corporis iste?
-              </p>
-            </div>
-            <div className="card-footer d-flex justify-content-between">
-              <button className="btn btn-primary">Etiqueta</button>
-              <div className="dropdown">
-                <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
-                <ul className="dropdown-menu">
-                  <li><NoteModal/></li>
-                  <li><EditNoteModal/></li>
-                  <li><DeleteNoteModal/></li>
-                </ul>
+        {notes.map((note, index) => {
+          return (
+            <div className="col py-3" key={index}>
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">{note.titleNote}</h3>
+                </div>
+                <div className="card-body">
+                  <p className="card-text">{note.contentNote.substr(0,239)}</p>
+                </div>
+                <div className="card-footer d-flex justify-content-between">
+                  <div>
+
+                <span className="badge text-bg-dark">etiqueta1</span>
+                  </div>
+                  <div className="dropdown">
+                    <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <NoteModal />
+                      </li>
+                      <li>
+                        <EditNoteModal />
+                      </li>
+                      <li>
+                        <DeleteNoteModal idNote={note.noteID}/>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="col py-3">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Titulo</h3>
-            </div>
-            <div className="card-body">
-              <p className="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam perferendis
-                voluptas itaque sed maiores saepe, nulla vel eaque vero. Facere consectetur, laborum
-                doloremque eos deserunt voluptates autem accusamus corporis iste?
-              </p>
-            </div>
-            <div className="card-footer">
-              <button className="btn btn-primary">Etiqueta</button>
-            </div>
-          </div>
-        </div>
-        <div className="col py-3">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Titulo</h3>
-            </div>
-            <div className="card-body">
-              <p className="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam perferendis
-                voluptas itaque sed maiores saepe, nulla vel eaque vero. Facere consectetur, laborum
-                doloremque eos deserunt voluptates autem accusamus corporis iste?
-              </p>
-            </div>
-            <div className="card-footer">
-              <button className="btn btn-primary">Etiqueta</button>
-            </div>
-          </div>
-        </div>
-        <div className="col py-3">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Titulo</h3>
-            </div>
-            <div className="card-body">
-              <p className="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam perferendis
-                voluptas itaque sed maiores saepe, nulla vel eaque vero. Facere consectetur, laborum
-                doloremque eos deserunt voluptates autem accusamus corporis iste?
-              </p>
-            </div>
-            <div className="card-footer">
-              <button className="btn btn-primary">Etiqueta</button>
-            </div>
-          </div>
-        </div>
-        <div className="col py-3">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Titulo</h3>
-            </div>
-            <div className="card-body">
-              <p className="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam perferendis
-                voluptas itaque sed maiores saepe, nulla vel eaque vero. Facere consectetur, laborum
-                doloremque eos deserunt voluptates autem accusamus corporis iste?
-              </p>
-            </div>
-            <div className="card-footer">
-              <button className="btn btn-primary">Etiqueta</button>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
