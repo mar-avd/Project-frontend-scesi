@@ -63,10 +63,10 @@ export default function HomePage() {
                     <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                     <ul className="dropdown-menu">
                       <li>
-                        <NoteModal />
+                        <NoteModal idNote={note.noteID}/>
                       </li>
                       <li>
-                        <EditNoteModal />
+                        <EditNoteModal idNote={note.noteID}/>
                       </li>
                       <li>
                         <DeleteNoteModal idNote={note.noteID}/>

@@ -1,15 +1,24 @@
-
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
+import { api } from '../../config/site.config';
+import AuthService from '../../config/auth.service';
 
 export default function DeleteNoteModal({idNote}){
-    
+  const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
+  //states
     const [show, setShow] = useState(false);
-
-    //states
+  //handlers
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleDelete = () => {
+      api.delete('note/delete?noteID=' + idNote, config).then(() => {
+        window.location.reload()
+      }).catch((error) => console.log(error))
+    }
     //render
     return(<>
     <Button variant='' onClick={handleShow}>
@@ -26,7 +35,7 @@ export default function DeleteNoteModal({idNote}){
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleDelete}>
             Eliminar
           </Button>
         </Modal.Footer>
