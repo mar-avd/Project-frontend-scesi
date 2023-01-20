@@ -4,7 +4,6 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useEffect, useState } from 'react';
 import { api } from '../../config/site.config';
 import EditNoteModal from '../../components/EditNoteModal/EditNoteModal';
-import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
 import NoteModal from '../../components/NoteModal/NoteModal';
 import AuthService from '../../config/auth.service';
 
@@ -18,17 +17,18 @@ export default function HomePage() {
       headers: { Authorization: `Bearer ${user.token}` },
     };
     api
-      .get('note/statusNote?statusNote=main', config)
+      .get('note/main', config)
       .then((response) => {
-        console.log(response.data);
         setNotes(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
   //handlers
-  const handleArchivar = () => {
-    
+  const handlerArchivar = (noteID) => {
+
   }
+  const handlerMoveTrash = (noteID) =>{}
+  const handlerFijar = (noteID) => {} 
   //render
   return (
     <div className="container-fluid">
@@ -73,10 +73,13 @@ export default function HomePage() {
                         <EditNoteModal idNote={note.noteID}/>
                       </li>
                       <li>
-                        <button className='btn' onClick={handleArchivar}>Archivar</button>
+                        <button className='btn' onClick={handlerFijar(note.noteID)}>Fijar</button>
                       </li>
                       <li>
-                        <DeleteNoteModal idNote={note.noteID}/>
+                        <button className='btn' onClick={handlerArchivar}>Archivar</button>
+                      </li>
+                      <li>
+                        <button className='btn' onClick={handlerMoveTrash(note.noteID)}>Eliminar</button>
                       </li>
                     </ul>
                   </div>

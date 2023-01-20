@@ -21,8 +21,8 @@ export default function DeleteNoteModal({idNote}){
     }
     //render
     return(<>
-    <Button variant='' onClick={handleShow}>
-        Eliminar
+    <Button variant='primary' onClick={handleShow}>
+        Eliminar definitivamente
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

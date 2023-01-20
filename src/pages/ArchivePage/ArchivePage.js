@@ -3,18 +3,18 @@ import { api } from "../../config/site.config";
 import AuthService from '../../config/auth.service';
 
 export default function ArchivePage(){
-    const user = AuthService.getCurrentUser();
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
     //states
     const [notes, setNotes] = useState([]);
     //init
     useEffect(()=>{
-        api.get('note/statusNote?statusNote=archivado', config).then((response) => {
+        const user = AuthService.getCurrentUser();
+        const config = {
+          headers: { Authorization: `Bearer ${user.token}` },
+        };
+        api.get('note/archivado', config).then((response) => {
             setNotes(response.data)
         }).catch((error) => console.log(error))
-    })
+    }, [])
     //handlers
     const handleDesarchivar = (noteID) => {
 
@@ -38,7 +38,7 @@ export default function ArchivePage(){
                 {notes.map((note, index)=>{
                     return(
                         <tr key={index}>
-                            <th scope="row">{index}</th>
+                            <th scope="row">{index + 1}</th>
                             <td>{note.titleNote}</td>
                             <td>{note.contentNote.substr(0, 199)}</td>
                             <td>{note.creationDate}</td>

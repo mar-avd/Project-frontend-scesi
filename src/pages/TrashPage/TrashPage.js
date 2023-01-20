@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
+import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
 
 export default function TrashPage() {
-  const user = AuthService.getCurrentUser();
-  const config = {
-    headers: { Authorization: `Bearer ${user.token}` },
-  };
   //states
   const [notes, setNotes] = useState([]);
   //init
   useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
     api
-      .get('note/statusNote?statusNote=papelera', config)
+      .get('note/papelera', config)
       .then((response) => {
         setNotes(response.data)
       })
       .catch((error) => console.log(error));
-  });
+  }, []);
   //handlers
   const handlerRestore = (noteID) => {};
-  const handlerDelete = (noteID) => {};
   //render
   return (
     <div>
@@ -42,15 +42,15 @@ export default function TrashPage() {
           {notes.map((note, index) => {
             return (
               <tr key={index}>
-                <th scope="row">{index}</th>
+                <th scope="row">{index + 1}</th>
                 <td>{note.titleNote}</td>
-                <td>{note.contentNote}</td>
+                <td>{note.contentNote.substr(0, 199)}</td>
                 <td>{note.creationDate}</td>
                 <td>{note.modificationDate}</td>
                 <td>
                   <div>
                     <button className="btn btn-secondary" onClick={handlerRestore(note.noteID)}>Recuperar</button>
-                    <button className="btn btn-primary" onClick={handlerDelete(note.noteID)}>Eliminar</button>
+                    <DeleteNoteModal idNote={note.noteID}/>
                   </div>
                 </td>
               </tr>
