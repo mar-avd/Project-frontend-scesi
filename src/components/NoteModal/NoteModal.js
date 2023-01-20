@@ -40,8 +40,11 @@ export default function NoteModal({idNote}){
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className='d-flex justify-content-between'>
+          <div className='d-flex justify-content-around'>
+            <small>
             <p>Ultima modificación {note.modificationDate}</p>
+
+            </small>
             <div>
               <Button variant="secondary" size='sm' onClick={handleClose}>
                 Eliminar

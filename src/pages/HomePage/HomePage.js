@@ -18,13 +18,17 @@ export default function HomePage() {
       headers: { Authorization: `Bearer ${user.token}` },
     };
     api
-      .get('note', config)
+      .get('note/statusNote?statusNote=main', config)
       .then((response) => {
         console.log(response.data);
         setNotes(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
+  //handlers
+  const handleArchivar = () => {
+    
+  }
   //render
   return (
     <div className="container-fluid">
@@ -67,6 +71,9 @@ export default function HomePage() {
                       </li>
                       <li>
                         <EditNoteModal idNote={note.noteID}/>
+                      </li>
+                      <li>
+                        <button className='btn' onClick={handleArchivar}>Archivar</button>
                       </li>
                       <li>
                         <DeleteNoteModal idNote={note.noteID}/>
