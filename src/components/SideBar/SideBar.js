@@ -1,7 +1,13 @@
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import authAction from '../../redux/auth/actions';
 
 export default function SideBar({sideBarOptions}){
     let location = useLocation();
+
+    const dispatch = useDispatch();
+    const {logout}=authAction;
+    //render
     return(
         <div>
             <div className=" container">
@@ -41,27 +47,9 @@ export default function SideBar({sideBarOptions}){
                 </a>
                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
                   <li>
-                    <a className="dropdown-item" href="#">
-                      New project...
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Profile
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Sign out
-                    </a>
+                    <button className="dropdown-item" onClick={() => {dispatch(logout())}}>
+                      Cerrar sesión
+                    </button>
                   </li>
                 </ul>
               </div>

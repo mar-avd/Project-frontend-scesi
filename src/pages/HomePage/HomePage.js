@@ -23,7 +23,18 @@ export default function HomePage() {
       })
       .catch((error) => console.log(error));
   }, []);
+  const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
   //handlers
+  const handlerLastMod = ()=>{
+
+    /*api.get('note/', config).then((response) =>{
+      console.log(response.data)
+      //setNotes(response.data)
+    }).catch((error) => console.log(error))*/
+  }
   const handlerArchivar = (noteID) => {
 
   }
@@ -36,8 +47,7 @@ export default function HomePage() {
         <div className="col-2">
           <DropdownButton variant="outline-primary" id="dropdown-item-button" title="Ordenar por">
             <Dropdown.Item as="button">Fecha de creación</Dropdown.Item>
-            <Dropdown.Item as="button">Última modificación</Dropdown.Item>
-            <Dropdown.Item as="button">Etiquetas</Dropdown.Item>
+            <Dropdown.Item as="button" onClick={handlerLastMod}>Última modificación</Dropdown.Item>
           </DropdownButton>
         </div>
         <div className="col-2">

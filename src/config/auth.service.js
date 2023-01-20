@@ -31,12 +31,15 @@ class AuthService {
     storageDelete('id_token');
     history.push('/');
   }
-  register(user) {
-    return api.post('auth/register', {
+  registro(user) {
+    /*api.post('user', {
       username: user.username,
-      email: user.email,
       password: user.password,
-    });
+      salt: "abcdefgh",
+    }).then((response) => {
+      console.log(response.data)
+    }).catch((error) => console.log(error));
+    //this.login(user);*/
   }
 }
 

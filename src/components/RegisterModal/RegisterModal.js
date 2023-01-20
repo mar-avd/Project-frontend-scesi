@@ -5,10 +5,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './RegisterModal.css';
+import { useDispatch } from 'react-redux';
+import authAction from '../../redux/auth/actions';
+import { api } from '../../config/site.config';
 
 const schema = yup
   .object({
-    email: yup.string().email().required(),
+    username: yup.string().required(),
     password: yup.string().required(),
   })
   .required();
@@ -19,11 +22,27 @@ export default function RegisterModal() {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
+
+  const {login} = authAction;
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   //handlers
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const handleRegister = () => {};
+  const handleRegister = (data) => {
+    const user = {
+      username: data.username,
+      password: data.password,
+    }
+    api.post('user', {
+      username: user.username,
+      password: user.password,
+      salt: "abcdefgh",
+    }).then((response) => {
+      console.log(response.data)
+      dispatch(login(user))
+    }).catch((error) => console.log(error));
+  };
 
   //render
   return (
@@ -40,9 +59,9 @@ export default function RegisterModal() {
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
-                {...register('email', { required: true })}
+                {...register('username', { required: true })}
               />
             </div>
             <div className="mb-3">
@@ -53,16 +72,11 @@ export default function RegisterModal() {
                 {...register('password', { required: true })}
               />
             </div>
+            <div className='text-end'>
+              <button className='btn btn-primary'>Registrarme</button>
+            </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Registrarme
-          </Button>
-        </Modal.Footer>
       </Modal>
     </span>
   );
