@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import moment from 'moment/moment';
@@ -17,6 +17,9 @@ export default function NoteModal({ idNote }) {
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
   };
+  useEffect(() => {
+    loadNote()
+  }, {})
   const loadNote = () => {
     api
       .get('note/oneNote?noteID=' + idNote, config)
@@ -27,14 +30,12 @@ export default function NoteModal({ idNote }) {
   };
   const loadTags = () => {
     api.get('noteToTags/tags?noteID=' + note.noteID, config).then((response) => {
-      console.log(response.data)
       setTags(response.data)
     }).catch((error) => console.log(error))
   }
   //states
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    loadNote();
     loadTags();
     setShow(true);
   };

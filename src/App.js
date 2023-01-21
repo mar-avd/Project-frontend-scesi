@@ -10,6 +10,9 @@ import SideBar from './components/SideBar/SideBar';
 import Login from './pages/Login/Login';
 import PrivateRoute from './utility/PrivateRoute';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { api } from './config/site.config';
+import AuthService from './config/auth.service';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.Auth.idToken)
@@ -20,6 +23,20 @@ function App() {
     { option: 'Archivados', icon: 'bi bi-archive-fill', to: '/archivados' },
     { option: 'Papelera', icon: 'bi bi-trash-fill', to: '/papelera' },
   ];
+  const [notesSearch, setNotesSearch] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  //handlers
+  const handlerSearch = () => {
+    const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
+    api.get('note/search?search=' + searchInput, config).then((response) => {
+      console.log(response.data)
+      setNotesSearch(response.data)
+    }).catch((error) => console.log(error))
+  }
+  //render
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
@@ -40,20 +57,31 @@ function App() {
                   aria-label="Toggle navigation"
                 ></button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                  <form className="d-flex" role="search">
+                  <div className="d-flex" role="search">
                     <input
                       className="form-control me-2"
                       type="search"
                       placeholder="Search"
                       aria-label="Search"
+                      value={searchInput}
+                      onChange={(e) => {setSearchInput(e.target.value)}}
                     />
-                    <button className="btn btn-outline-success" type="submit">
+                    <button className="btn btn-outline-success" onClick={handlerSearch}>
                       Search
                     </button>
-                  </form>
+                  </div>
                 </div>
               </div>
             </nav>
+            {notesSearch.map((noteSearch, index) => {
+              return(
+                <div key={index}>
+                  <h3>Resultado de la búsqueda</h3>
+                  <p>{noteSearch.contentNote}</p>
+                  <hr/>
+                </div>
+              )
+            })}
             <Routes>
               <Route index element={<PrivateRoute>
                 
