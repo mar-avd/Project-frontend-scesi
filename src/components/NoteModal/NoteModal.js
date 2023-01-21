@@ -19,7 +19,7 @@ export default function NoteModal({ idNote }) {
   };
   useEffect(() => {
     loadNote()
-  }, {})
+  }, [])
   const loadNote = () => {
     api
       .get('note/oneNote?noteID=' + idNote, config)
