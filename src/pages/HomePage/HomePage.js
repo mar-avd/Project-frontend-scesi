@@ -5,6 +5,9 @@ import EditNoteModal from '../../components/EditNoteModal/EditNoteModal';
 import NoteModal from '../../components/NoteModal/NoteModal';
 import AuthService from '../../config/auth.service';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import 'moment/locale/es';
+
 
 export default function HomePage() {
   //states
@@ -19,12 +22,14 @@ export default function HomePage() {
     api
       .get('note/statusNote?statusNote=main', config)
       .then((response) => {
+        console.log(response.data)
         setNotes(response.data);
       })
       .catch((error) => console.log(error));
     api
       .get('note/statusNote?statusNote=importante', config)
       .then((response) => {
+        
         setImportantNotes(response.data);
       })
       .catch((error) => console.log(error));
@@ -78,8 +83,10 @@ export default function HomePage() {
                 </div>
                 <div className="card-footer d-flex justify-content-between">
                   <div>
-
-                <span className="badge text-bg-dark">etiqueta1</span>
+                    <small className='text-muted'>
+                      Creado el&nbsp; 
+                      {moment(impNote.creationDate).format('L')}
+                    </small>
                   </div>
                   <div className="dropdown">
                     <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
@@ -119,10 +126,11 @@ export default function HomePage() {
                 <div className="card-body">
                   <p className="card-text">{note.contentNote.substr(0,239)}</p>
                 </div>
-                <div className="card-footer d-flex justify-content-between">
-                  <div>
-
-                <span className="badge text-bg-dark">etiqueta1</span>
+                <div className="card-footer d-flex justify-content-between ">
+                  <div className='d-flex align-items-center'>
+                    <small className='text-muted'>
+                      Creado el&nbsp;{moment(note.creationDate).format('L')}
+                    </small>
                   </div>
                   <div className="dropdown">
                     <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>

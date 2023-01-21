@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import authService from "../../config/auth.service";
 import authAction from '../../redux/auth/actions';
 
 export default function SideBar({sideBarOptions}){
@@ -7,6 +8,7 @@ export default function SideBar({sideBarOptions}){
 
     const dispatch = useDispatch();
     const {logout}=authAction;
+    const user = authService.getCurrentUser();
     //render
     return(
         <div>
@@ -36,14 +38,8 @@ export default function SideBar({sideBarOptions}){
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <img
-                    src="https://github.com/mdo.png"
-                    alt=""
-                    width="32"
-                    height="32"
-                    className="rounded-circle me-2"
-                  />
-                  <strong>mdo</strong>
+                  <i className="bi bi-person-circle"></i> &nbsp;
+                  <strong>{user.usernameID}</strong>
                 </a>
                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
                   <li>
