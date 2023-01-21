@@ -39,7 +39,6 @@ export default function RegisterModal() {
       password: user.password,
       salt: "abcdefgh",
     }).then((response) => {
-      console.log(response.data)
       dispatch(login(user))
     }).catch((error) => console.log(error));
   };

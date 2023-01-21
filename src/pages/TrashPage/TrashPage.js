@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
+import { useNavigate } from 'react-router-dom';
 
 export default function TrashPage() {
   //states
@@ -13,14 +14,23 @@ export default function TrashPage() {
       headers: { Authorization: `Bearer ${user.token}` },
     };
     api
-      .get('note/papelera', config)
+      .get('note/statusNote?statusNote=papelera', config)
       .then((response) => {
         setNotes(response.data)
       })
       .catch((error) => console.log(error));
   }, []);
   //handlers
-  const handlerRestore = (noteID) => {};
+  let navigate = useNavigate();
+  const user = AuthService.getCurrentUser();
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
+  const handlerRestore = (noteID) => {
+    api.patch('note?noteID='+noteID, {statusNote: "main"}, config).then(()=>{
+      navigate('/');
+    }).catch((error) => console.log(error))
+  };
   //render
   return (
     <div>
@@ -49,7 +59,7 @@ export default function TrashPage() {
                 <td>{note.modificationDate}</td>
                 <td>
                   <div>
-                    <button className="btn btn-secondary" onClick={handlerRestore(note.noteID)}>Recuperar</button>
+                    <button className="btn btn-secondary" onClick={() => handlerRestore(note.noteID)}>Recuperar</button>
                     <DeleteNoteModal idNote={note.noteID}/>
                   </div>
                 </td>

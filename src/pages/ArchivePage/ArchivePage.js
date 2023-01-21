@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { api } from "../../config/site.config";
 import AuthService from '../../config/auth.service';
+import { useNavigate } from "react-router-dom";
 
 export default function ArchivePage(){
     //states
@@ -11,13 +12,20 @@ export default function ArchivePage(){
         const config = {
           headers: { Authorization: `Bearer ${user.token}` },
         };
-        api.get('note/archivado', config).then((response) => {
+        api.get('note/statusNote?statusNote=archivado', config).then((response) => {
             setNotes(response.data)
         }).catch((error) => console.log(error))
     }, [])
+    const user = AuthService.getCurrentUser();
+        const config = {
+          headers: { Authorization: `Bearer ${user.token}` },
+        };
+    let navigate = useNavigate()
     //handlers
     const handleDesarchivar = (noteID) => {
-
+        api.patch('note?noteID=' + noteID, {statusNote: "main"}, config).then((response)=>{
+            navigate('/')
+        }).catch((error)=>console.log(error))
     }
     //render
     return(
@@ -43,7 +51,7 @@ export default function ArchivePage(){
                             <td>{note.contentNote.substr(0, 199)}</td>
                             <td>{note.creationDate}</td>
                             <td>{note.modificationDate}</td>
-                            <td><button className="btn btn-primary" onClick={handleDesarchivar(note.noteID)}>Desarchivar</button></td>
+                            <td><button className="btn btn-primary" onClick={() => handleDesarchivar(note.noteID)}>Desarchivar</button></td>
                         </tr>
 
                     )
