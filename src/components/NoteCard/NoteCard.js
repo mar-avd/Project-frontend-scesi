@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/es';
 
-export default function NoteCard({ note, fijado, archivado }) {
+export default function NoteCard({ note}) {
   const user = AuthService.getCurrentUser();
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
@@ -42,7 +42,7 @@ export default function NoteCard({ note, fijado, archivado }) {
     <div className="col py-3">
       <div className="card">
         <div className="card-header">
-          <h3 className="card-title">{note.titleNote}</h3>
+          <h4 className="card-title">{note.titleNote}</h4>
         </div>
         <div className="card-body">
           <p className="card-text">{note.contentNote.substr(0, 239)}</p>
@@ -63,7 +63,7 @@ export default function NoteCard({ note, fijado, archivado }) {
                 <EditNoteModal idNote={note.noteID} />
               </li>
               <li>
-                {fijado ? (
+                {note.statusNote === 'importante' ? (
                   <button className="btn" onClick={() => handlerFijar(note.noteID, 'main')}>
                     Desfijar
                   </button>
@@ -74,7 +74,7 @@ export default function NoteCard({ note, fijado, archivado }) {
                 )}
               </li>
               <li>
-                {archivado ? (
+                {note.statusNote === 'archivado' ? (
                   <button className="btn" disabled>
                     Desarchivar
                   </button>

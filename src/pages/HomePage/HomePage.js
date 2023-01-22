@@ -17,7 +17,6 @@ export default function HomePage() {
     api
       .get('note/statusNote?statusNote=main', config)
       .then((response) => {
-        console.log(response.data);
         setNotes(response.data);
       })
       .catch((error) => console.log(error));
@@ -44,13 +43,13 @@ export default function HomePage() {
       <div className="row row-cols-md-3">
         <h3 className="pb-3">Notas importantes</h3>
         {importantNotes.map((impNote, index) => {
-          return <NoteCard key={index} fijado={true} note={impNote} archivado={false} />;
+          return <NoteCard key={index} note={impNote} />;
         })}
       </div>
       <hr />
       <div className="row row-cols-md-3">
         {notes.map((note, index) => {
-          return <NoteCard key={index} note={note} fijado={false} archivado={false} />;
+          return <NoteCard key={index} note={note} />;
         })}
       </div>
     </div>
