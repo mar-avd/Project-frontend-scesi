@@ -10,6 +10,7 @@ import SideBar from './components/SideBar/SideBar';
 import Login from './pages/Login/Login';
 import PrivateRoute from './utility/PrivateRoute';
 import { useSelector } from 'react-redux';
+import SearchComponent from './components/SearchComponent/SearchComponent';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.Auth.idToken)
@@ -20,6 +21,8 @@ function App() {
     { option: 'Archivados', icon: 'bi bi-archive-fill', to: '/archivados' },
     { option: 'Papelera', icon: 'bi bi-trash-fill', to: '/papelera' },
   ];
+  
+  //render
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
@@ -28,32 +31,7 @@ function App() {
             <SideBar sideBarOptions={sideBarOptions} />
           </div>
           <div className="col-9">
-            <nav className="navbar navbar-expand-sm bg-light">
-              <div className="container-fluid">
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                ></button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                  <form className="d-flex" role="search">
-                    <input
-                      className="form-control me-2"
-                      type="search"
-                      placeholder="Search"
-                      aria-label="Search"
-                    />
-                    <button className="btn btn-outline-success" type="submit">
-                      Search
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </nav>
+            <SearchComponent/>
             <Routes>
               <Route index element={<PrivateRoute>
 
