@@ -15,7 +15,8 @@ export default function ArchivePage(){
         api.get('note/statusNote?statusNote=archivado', config).then((response) => {
             setNotes(response.data)
         }).catch((error) => console.log(error))
-    }, [])
+    }, []);
+    
     const user = AuthService.getCurrentUser();
         const config = {
           headers: { Authorization: `Bearer ${user.token}` },

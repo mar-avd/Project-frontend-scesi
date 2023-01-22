@@ -23,7 +23,7 @@ export default function Login() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const {login} = authAction;
+  const { login } = authAction;
   let navigate = useNavigate();
   //redux
   const isLoggedIn = useSelector((state) => state.Auth.idToken);
@@ -40,44 +40,44 @@ export default function Login() {
       username: data.username,
       password: data.password
     }
-    if(user){
+    if (user) {
       dispatch(login(user));
 
-    }else{
+    } else {
       dispatch((login()))
     }
   };
 
   return (
-    <form className='bodyLogin'onSubmit={handleSubmit(handleLogin)}>
+    <form className='bodyLogin' onSubmit={handleSubmit(handleLogin)}>
       <div className="container-fluid">
         <div className="container d-flex vh-100 justify-content-center align-items-center">
-              <div className="text center">
-                  <div className="form car header text-center">
-                      <h3 className="titulo text-black">NoteScesi</h3>
-                      <div className="entradas">
-                      <div className="mb-3">
-                        <input type="text" className="form-control" placeholder="email" 
-                        {...register('username', { required: true })}/>
-                        {errors.email && <span className="badge text-bg-danger">This field is required</span>}
-                      </div>
-                      <div className="mb-3">
-                        <input type="password" className="form-control" placeholder="password" 
-                        {...register('password', {required: true})}/>
-                        {errors.password && (<span className="badge text-bg-danger">This field is required</span>)}
-                      </div>
-                      </div>
-                      <div className="botones mb-3">
-                      <div className="d-grid gap-2 d-md-block text-center">
-                      <RegisterModal className='BotonSignUp large'></RegisterModal>
-                      </div>
-                      <div className="d-grid gap-2 d-md-block text-center">
-                        <button className="BotonLogin large">Login</button>
-                      </div>
-                      </div>
-                  </div>
+          <div className="text center">
+            <div className="form car header text-center">
+              <h3 className="titulo text-black">NoteScesi</h3>
+              <div className="entradas">
+                <div className="mb-3">
+                  <input type="text" className="form-control" placeholder="email"
+                    {...register('username', { required: true })} />
+                  {errors.email && <span className="badge text-bg-danger">This field is required</span>}
+                </div>
+                <div className="mb-3">
+                  <input type="password" className="form-control" placeholder="password"
+                    {...register('password', { required: true })} />
+                  {errors.password && (<span className="badge text-bg-danger">This field is required</span>)}
+                </div>
               </div>
+              <div className="botones mb-3">
+                <div className="d-grid gap-2 d-md-block text-center">
+                  <RegisterModal className='BotonSignUp large'></RegisterModal>
+                </div>
+                <div className="d-grid gap-2 d-md-block text-center">
+                  <button className="BotonLogin large">Login</button>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
       </div>
     </form>
   );

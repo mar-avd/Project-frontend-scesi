@@ -28,36 +28,34 @@ export default function HomePage() {
         setImportantNotes(response.data);
       })
       .catch((error) => console.log(error));
-    
-    
   }, []);
+
   const user = AuthService.getCurrentUser();
   const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
+    headers: { Authorization: `Bearer ${user.token}` },
+  };
   let navigate = useNavigate();
   //handlers
   const handlerArchivar = (noteID) => {
-    api.patch('note?noteID=' + noteID, {statusNote: "archivado"}, config).then((response)=>{
+    api.patch('note?noteID=' + noteID, { statusNote: "archivado" }, config).then((response) => {
       navigate('/archivados')
-  }).catch((error)=>console.log(error))
+    }).catch((error) => console.log(error))
   }
-  const handlerMoveTrash = (noteID) =>{
-    api.patch('note?noteID=' + noteID, {statusNote: "papelera"}, config).then((response)=>{
+  const handlerMoveTrash = (noteID) => {
+    api.patch('note?noteID=' + noteID, { statusNote: "papelera" }, config).then((response) => {
       navigate('/papelera')
-  }).catch((error)=>console.log(error))
+    }).catch((error) => console.log(error))
   }
   const handlerFijar = (noteID, status) => {
-    api.patch('note?noteID=' + noteID, {statusNote: status}, config).then((response)=>{
+    api.patch('note?noteID=' + noteID, { statusNote: status }, config).then((response) => {
       window.location.reload()
 
-  }).catch((error)=>console.log(error))
-  } 
+    }).catch((error) => console.log(error))
+  }
   //render
   return (
     <div className="container-fluid">
       <div className="row justify-content-end py-3">
-        
         <div className="col-2">
           <div className="text-end">
             <AddModal />
@@ -67,28 +65,28 @@ export default function HomePage() {
       <div className='row row-cols-md-3'>
         <h3 className='pb-3'>Notas importantes</h3>
         {importantNotes.map((impNote, index) => {
-          return(
+          return (
             <div className='col py-3' key={index}>
               <div className="card">
                 <div className="card-header">
                   <h3 className="card-title">{impNote.titleNote}</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-text">{impNote.contentNote.substr(0,239)}</p>
+                  <p className="card-text">{impNote.contentNote.substr(0, 239)}</p>
                 </div>
                 <div className="card-footer d-flex justify-content-between">
                   <div>
 
-                <span className="badge text-bg-dark">etiqueta1</span>
+                    <span className="badge text-bg-dark">etiqueta1</span>
                   </div>
                   <div className="dropdown">
                     <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                     <ul className="dropdown-menu">
                       <li>
-                        <NoteModal idNote={impNote.noteID}/>
+                        <NoteModal idNote={impNote.noteID} />
                       </li>
                       <li>
-                        <EditNoteModal idNote={impNote.noteID}/>
+                        <EditNoteModal idNote={impNote.noteID} />
                       </li>
                       <li>
                         <button className='btn' onClick={() => handlerFijar(impNote.noteID, "main")}>Desfijar</button>
@@ -107,7 +105,7 @@ export default function HomePage() {
           )
         })}
       </div>
-        <hr/>
+      <hr />
       <div className="row row-cols-md-3">
         {notes.map((note, index) => {
           return (
@@ -117,21 +115,21 @@ export default function HomePage() {
                   <h3 className="card-title">{note.titleNote}</h3>
                 </div>
                 <div className="card-body">
-                  <p className="card-text">{note.contentNote.substr(0,239)}</p>
+                  <p className="card-text">{note.contentNote.substr(0, 239)}</p>
                 </div>
                 <div className="card-footer d-flex justify-content-between">
                   <div>
 
-                <span className="badge text-bg-dark">etiqueta1</span>
+                    <span className="badge text-bg-dark">etiqueta1</span>
                   </div>
                   <div className="dropdown">
                     <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
                     <ul className="dropdown-menu">
                       <li>
-                        <NoteModal idNote={note.noteID}/>
+                        <NoteModal idNote={note.noteID} />
                       </li>
                       <li>
-                        <EditNoteModal idNote={note.noteID}/>
+                        <EditNoteModal idNote={note.noteID} />
                       </li>
                       <li>
                         <button className='btn' onClick={() => handlerFijar(note.noteID, "importante")}>Fijar</button>
