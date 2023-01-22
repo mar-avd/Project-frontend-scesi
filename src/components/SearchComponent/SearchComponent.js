@@ -8,15 +8,16 @@ export default function SearchComponent() {
   const [results, setResults] = useState(<></>);
 
   const loadNotes = () => {
-    const user = AuthService.getCurrentUser();
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
-    api
-      .get('note/search?search=' + searchInput, config)
-      .then((response) => {
-        let notes = response.data;
-        setResults(
+    if (searchInput !== '') {
+      const user = AuthService.getCurrentUser();
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` },
+      };
+      api
+        .get('note/search?search=' + searchInput, config)
+        .then((response) => {
+          let notes = response.data;
+          setResults(
             <div className="row justify-content-between">
               <div className="col">
                 <h3>Resultados de la búsqueda</h3>
@@ -31,12 +32,13 @@ export default function SearchComponent() {
                   })}
                 </div>
               ) : (
-                <div className='text-center'>No se encontraron resultados</div>
+                <div className="text-center">No se encontraron resultados</div>
               )}
             </div>,
           );
-      })
-      .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
+    }
   };
   //handlers
   const handlerSearch = () => {

@@ -12,7 +12,7 @@ export default function EditNoteModal({idNote}){
     const handleShow = () => setShow(true);
     //render
     return(<>
-    <Button variant='btn' onClick={handleShow}>
+    <Button variant='btn dropdown-item' onClick={handleShow}>
         Editar
       </Button>
       <Modal show={show} onHide={handleClose}>

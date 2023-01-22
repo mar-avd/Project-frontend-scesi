@@ -3,6 +3,8 @@ import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import DeleteNoteModal from '../../components/DeleteNoteModal/DeleteNoteModal';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import 'moment/locale/es';
 
 export default function TrashPage() {
   //states
@@ -16,20 +18,23 @@ export default function TrashPage() {
     api
       .get('note/statusNote?statusNote=papelera', config)
       .then((response) => {
-        setNotes(response.data)
+        setNotes(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
   //handlers
   let navigate = useNavigate();
   const user = AuthService.getCurrentUser();
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
+  const config = {
+    headers: { Authorization: `Bearer ${user.token}` },
+  };
   const handlerRestore = (noteID) => {
-    api.patch('note?noteID='+noteID, {statusNote: "main"}, config).then(()=>{
-      navigate('/');
-    }).catch((error) => console.log(error))
+    api
+      .patch('note?noteID=' + noteID, { statusNote: 'main' }, config)
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => console.log(error));
   };
   //render
   return (
@@ -55,12 +60,17 @@ export default function TrashPage() {
                 <th scope="row">{index + 1}</th>
                 <td>{note.titleNote}</td>
                 <td>{note.contentNote.substr(0, 199)}</td>
-                <td>{note.creationDate}</td>
-                <td>{note.modificationDate}</td>
+                <td>{moment(note.creationDate).format('llll')}</td>
+                <td>{moment(note.modificationDate).format('llll')}</td>
                 <td>
                   <div>
-                    <button className="btn btn-secondary" onClick={() => handlerRestore(note.noteID)}>Recuperar</button>
-                    <DeleteNoteModal idNote={note.noteID}/>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handlerRestore(note.noteID)}
+                    >
+                      Recuperar
+                    </button>
+                    <DeleteNoteModal idNote={note.noteID} />
                   </div>
                 </td>
               </tr>
