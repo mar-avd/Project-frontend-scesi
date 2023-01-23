@@ -31,8 +31,6 @@ export default function AddModal() {
   };
 
   const addNote = () => {
-    console.log(noteTitle);
-    console.log(noteContent);
     api.post('note', {
       titleNote: noteTitle,
       contentNote: noteContent
