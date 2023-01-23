@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/es';
 
-export default function NoteCard({ note}) {
+export default function NoteCard({ note }) {
   const user = AuthService.getCurrentUser();
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
@@ -64,28 +64,37 @@ export default function NoteCard({ note}) {
               </li>
               <li>
                 {note.statusNote === 'importante' ? (
-                  <button className="btn" onClick={() => handlerFijar(note.noteID, 'main')}>
+                  <button
+                    className="btn dropdown-item"
+                    onClick={() => handlerFijar(note.noteID, 'main')}
+                  >
                     Desfijar
                   </button>
                 ) : (
-                  <button className="btn" onClick={() => handlerFijar(note.noteID, 'importante')}>
+                  <button
+                    className="btn dropdown-item"
+                    onClick={() => handlerFijar(note.noteID, 'importante')}
+                  >
                     Fijar
                   </button>
                 )}
               </li>
               <li>
                 {note.statusNote === 'archivado' ? (
-                  <button className="btn" disabled>
+                  <button className="btn dropdown-item" disabled>
                     Desarchivar
                   </button>
                 ) : (
-                  <button className="btn" onClick={() => handlerArchivar(note.noteID)}>
+                  <button
+                    className="btn dropdown-item"
+                    onClick={() => handlerArchivar(note.noteID)}
+                  >
                     Archivar
                   </button>
                 )}
               </li>
               <li>
-                <button className="btn" onClick={() => handlerMoveTrash(note.noteID)}>
+                <button className="btn dropdown-item" onClick={() => handlerMoveTrash(note.noteID)}>
                   Eliminar
                 </button>
               </li>

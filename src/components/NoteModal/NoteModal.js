@@ -42,7 +42,7 @@ export default function NoteModal({ idNote }) {
   //render
   return (
     <>
-      <Button variant="btn" onClick={handleShow}>
+      <Button variant="btn dropdown-item" onClick={handleShow}>
         Ver nota
       </Button>
       <Modal show={show} onHide={handleClose}>

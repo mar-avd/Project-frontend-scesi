@@ -48,7 +48,7 @@ export default function EditNoteModal({idNote}){
     };
     //render
     return(<>
-    <Button variant='btn' onClick={handleShow}>
+    <Button variant='btn dropdown-item' onClick={handleShow}>
         Editar
       </Button>
       <Modal show={show} onHide={handleClose}>
