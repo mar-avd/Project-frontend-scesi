@@ -1,12 +1,16 @@
 import React from 'react';
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
+import { Editor, EditorState, RichUtils, getDefaultKeyBinding, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import '../prueba/RichEditor.css'
+import AuthService from '../../../config/auth.service';
+import { api } from "../../../config/site.config";
 
 export default class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editorState: EditorState.createEmpty() };
-
+        this.content = "";
+        this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
+        this.noteID = this.props;
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({ editorState });
 
@@ -16,9 +20,23 @@ export default class RichEditorExample extends React.Component {
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
     }
 
+    componentDidMount() {
+        const user = AuthService.getCurrentUser();
+        const config = {
+            headers: { Authorization: `Bearer ${user.token}` },
+        };
+
+        api.get(`note/oneNote?noteID=${this.props.noteID}`, config)
+            .then((response) => {
+                this.setState({ editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(response.data.contentHTMLNote))) })
+            })
+            .catch((error) => console.log(error));
+    }
+
     _handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
+            console.log('Shorcut', newState); // Cuando usamos un shortcut
             this.onChange(newState);
             return true;
         }
@@ -26,11 +44,12 @@ export default class RichEditorExample extends React.Component {
     }
 
     _mapKeyToEditorCommand(e) {
-        if (e.keyCode === 9 /* TAB */) {
+        if (e.keyCode === 9) { //TAB
+            console.log('TAB', e); //Cuando pulso el TAB
             const newEditorState = RichUtils.onTab(
                 e,
                 this.state.editorState,
-                4, /* maxDepth */
+                4, // maxDepth 
             );
             if (newEditorState !== this.state.editorState) {
                 this.onChange(newEditorState);
@@ -41,6 +60,7 @@ export default class RichEditorExample extends React.Component {
     }
 
     _toggleBlockType(blockType) {
+        console.log('Blocktype', blockType); // Usamos los H1, H2, etc
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -50,6 +70,7 @@ export default class RichEditorExample extends React.Component {
     }
 
     _toggleInlineStyle(inlineStyle) {
+        console.log(inlineStyle) //Los estilos de texto
         this.onChange(
             RichUtils.toggleInlineStyle(
                 this.state.editorState,
@@ -58,14 +79,51 @@ export default class RichEditorExample extends React.Component {
         );
     }
 
+    getContentHTML() {
+        const user = AuthService.getCurrentUser();
+        const config = {
+            headers: { Authorization: `Bearer ${user.token}` },
+        };
+
+        api.get(`note/oneNote?noteID=${this.props.noteID}`, config)
+            .then((response) => {
+                const data = response.data.contentHTMLNote;
+                return data;
+            })
+            .catch((error) => console.log(error));
+    }
+
+    // Para actualizar los contentHTML de mi nota 
+    getConversion(editorState) {
+        console.log(convertToRaw(editorState.getCurrentContent()));
+        const user = AuthService.getCurrentUser();
+        const config = {
+            headers: { Authorization: `Bearer ${user.token}` },
+        };
+
+        const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+
+        let conversionString = "";
+        convertToRaw(editorState.getCurrentContent())
+            .blocks.forEach(element => {
+                conversionString += " " + element.text;
+            });
+
+        api.patch(`note?noteID=${this.props.noteID}`, { contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => console.log(error));
+    };
+
     render() {
         const { editorState } = this.state;
 
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
+        // Si el usuario cambia el tipo de bloque antes de introducir cualquier texto, podemos aplicar estilo 
+        // al marcador de posición u ocultarlo. Vamos a ocultarlo ahora.
         let className = 'RichEditor-editor';
         var contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
+        if (!contentState.hasText()) { //Verificamos si hay contenido
             if (contentState.getBlockMap().first().getType() !== 'unstyled') {
                 className += ' RichEditor-hidePlaceholder';
             }
@@ -73,26 +131,31 @@ export default class RichEditorExample extends React.Component {
 
         return (
             <div className="RichEditor-root">
-                <BlockStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleBlockType}
-                />
-                <InlineStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleInlineStyle}
-                />
-                <div className={className} onClick={this.focus}>
-                    <Editor
-                        blockStyleFn={getBlockStyle}
-                        customStyleMap={styleMap}
+                <div>
+                    <BlockStyleControls
                         editorState={editorState}
-                        handleKeyCommand={this.handleKeyCommand}
-                        keyBindingFn={this.mapKeyToEditorCommand}
-                        onChange={this.onChange}
-                        placeholder="Tell a story..."
-                        ref="editor"
-                        spellCheck={true}
+                        onToggle={this.toggleBlockType}
                     />
+                    <InlineStyleControls
+                        editorState={editorState}
+                        onToggle={this.toggleInlineStyle}
+                    />
+                    <div className={className} onClick={this.focus}>
+                        <Editor
+                            blockStyleFn={getBlockStyle}
+                            customStyleMap={styleMap}
+                            editorState={editorState}
+                            handleKeyCommand={this.handleKeyCommand}
+                            keyBindingFn={this.mapKeyToEditorCommand}
+                            onChange={this.onChange}
+                            placeholder="Tell a story..."
+                            ref="editor"
+                            spellCheck={true}
+                        />
+                    </div>
+                </div>
+                <div className='py-3 text-end'>
+                    <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
                 </div>
             </div>
         );
