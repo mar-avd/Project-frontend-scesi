@@ -5,12 +5,15 @@ import '../prueba/RichEditor.css'
 import AuthService from '../../../config/auth.service';
 import { api } from "../../../config/site.config";
 
+
 export default class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
+
         this.content = "";
         this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
         this.noteID = this.props;
+
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({ editorState });
 
@@ -19,6 +22,7 @@ export default class RichEditorExample extends React.Component {
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
     }
+
 
     componentDidMount() {
         const user = AuthService.getCurrentUser();
@@ -37,6 +41,7 @@ export default class RichEditorExample extends React.Component {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
             console.log('Shorcut', newState); // Cuando usamos un shortcut
+
             this.onChange(newState);
             return true;
         }
@@ -44,6 +49,7 @@ export default class RichEditorExample extends React.Component {
     }
 
     _mapKeyToEditorCommand(e) {
+
         if (e.keyCode === 9) { //TAB
             console.log('TAB', e); //Cuando pulso el TAB
             const newEditorState = RichUtils.onTab(
@@ -60,6 +66,7 @@ export default class RichEditorExample extends React.Component {
     }
 
     _toggleBlockType(blockType) {
+
         console.log('Blocktype', blockType); // Usamos los H1, H2, etc
         this.onChange(
             RichUtils.toggleBlockType(
@@ -78,6 +85,7 @@ export default class RichEditorExample extends React.Component {
             )
         );
     }
+
 
     getContentHTML() {
         const user = AuthService.getCurrentUser();
