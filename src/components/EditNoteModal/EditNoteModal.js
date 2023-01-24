@@ -18,11 +18,13 @@ export default function EditNoteModal({ idNote }) {
   const [noteTitle, setNoteTitle] = useState('');
   const [noteContent, setNoteContent] = useState('');
   //
+
   const user = AuthService.getCurrentUser();
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
   };
   // cargar notas
+
   const loadNote = () => {
     api
       .get('note/oneNote?noteID=' + idNote, config)
@@ -63,6 +65,7 @@ export default function EditNoteModal({ idNote }) {
         console.log(loadCheck)
         setCheckedState(loadCheck);
   }, []);
+
   //states
   const handleClose = () => setShow(false);
   /* const handleShow = () => setShow(true); */
@@ -88,33 +91,23 @@ export default function EditNoteModal({ idNote }) {
     })    
   }
   //render
-  return (
-    <>
-      <Button variant="btn dropdown-item" onClick={handleShow}>
-        Editar
-      </Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <input
-              className="form-control"
-              type="text"
-              defaultValue={note.titleNote}
-              onChange={(e) => setNoteTitle(e.target.value)}
-            ></input>
-            <div className="container">
-              <RichEditorExample></RichEditorExample>
-            </div>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input className="form-control" type="text" value={note.contentNote}></input>
-          {/*<div>
-            {tags.map((tag, index) => {
-              return(<span className="badge text-bg-primary mx-1" key={index}>{tag.tags.nameTag}</span>)
-            })}
-          </div>*/}
-          <div>
+  return (<>
+    <Button variant='btn dropdown-item' onClick={handleShow}>
+      Editar
+    </Button>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          <input className='form-control' type='text' value={note.titleNote}
+            onChange={(e) => setNoteTitle(e.target.value)}>
+          </input>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className='container'>
+          <RichEditorExample noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
+        </div>
+        <div>
             <h4>Cambiar etiquetas:</h4>
             {tags.map((tag, index) => {
               return (
@@ -136,25 +129,17 @@ export default function EditNoteModal({ idNote }) {
             <div className='text-end'>
               <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
             </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="col">
-            <small className="">
-              <p>
-                Ultima modificación &nbsp;
-                {moment(note.modificationDate).format('llll')}
-              </p>
-            </small>
-          </div>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Guardar cambios
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="col text-center">
+          <small className="">
+            <p >
+              Ultima modificación &nbsp;
+              {moment(note.modificationDate).format('llll')}
+            </p>
+          </small>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  </>)
 }
