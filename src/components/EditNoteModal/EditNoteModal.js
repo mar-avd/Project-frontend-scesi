@@ -23,14 +23,14 @@ export default function EditNoteModal({ idNote }) {
     headers: { Authorization: `Bearer ${user.token}` },
   };
   // cargar notas
-  const loadNote = () => {
-    api.get('note/oneNote?noteID=' + idNote, config)
+  copi.get('note/oneNote?noteID=' + idNote, config)
       .then((response) => {
         setNote(response.data);
       }).catch((error) => console.log(error))
   }
   //
-
+nst loadNote = () => {
+    a
   // cargar tahs
   const loadTags = () => {
     api.get('noteToTags/tags?noteID=' + note.noteID, config).then((response) => {

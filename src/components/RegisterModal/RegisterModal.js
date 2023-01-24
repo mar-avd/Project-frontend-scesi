@@ -36,9 +36,9 @@ export default function RegisterModal() {
     }
     api.post('user', {
       username: user.username,
-      password: user.password,
-      salt: "abcdefgh",
+      password: user.password
     }).then((response) => {
+      console.log(response)
       dispatch(login(user))
     }).catch((error) => console.log(error));
   };
