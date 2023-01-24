@@ -45,7 +45,7 @@ export default function NoteCard({ note }) {
           <h4 className="card-title">{note.titleNote}</h4>
         </div>
         <div className="card-body">
-          <p className="card-text">{note.contentNote.substr(0, 239)}</p>
+          <p className="card-text" dangerouslySetInnerHTML={{ __html: note.contentHTMLNote }}>{/* {note.contentHTMLNote.substr(0, 239)} */}</p>
         </div>
         <div className="card-footer d-flex justify-content-between ">
           <div className="d-flex align-items-center">
