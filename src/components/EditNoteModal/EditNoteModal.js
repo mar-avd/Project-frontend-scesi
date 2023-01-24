@@ -34,27 +34,51 @@ export default function EditNoteModal({ idNote }) {
       .catch((error) => console.log(error));
   };
   //cargar las etiquetas de una nota
-  let tagsNote = []
-  const loadTagsNote = () => {
+  //let tagsNote = []
+  /*const loadTagsNote = () => {
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
       tagsNote = response.data;
     }).catch((error) => console.log(error))
-  }
+  }*/
   // cargar todas las tags de un usuario
-  const loadTags = () => {
+  /*const loadTags = () => {
     api
       .get('tag', config)
       .then((response) => {
         setTags(response.data);
       })
       .catch((error) => console.log(error));
-  };
-  useEffect(() => {
-    loadTags();
+  };*/
+  const [allTags, setAllTags] = useState([]);
+  const [noteTags, setNoteTags] = useState([]);
+  const loadingTags = () => {
+    let aux = [];
+    api
+      .get('tag', config)
+      .then((response) => {
+        setAllTags(response.data);
+      })
+      .catch((error) => console.log(error));
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
-      tagsNote = response.data;
+      response.data.forEach(item => {
+        aux.push(item.tagID);
+      });
+      setNoteTags(aux);
     }).catch((error) => console.log(error))
-    let loadCheck = [];
+    allTags.forEach(tag => {
+      if(noteTags.indexOf(tag.tagID) !== -1){
+        tag['isChecked'] = true;
+      }else{
+        tag['isChecked'] = false;
+      }
+    })
+  }
+  useEffect(() => {
+    loadingTags();
+    setTags(allTags);
+     console.log(noteTags)
+    //setCheckedState(allTags)
+    /*let loadCheck = [];
         tags.forEach((tag, index) => {
           if(tagsNote.indexOf(tag.nameTag) ===! -1){
             loadCheck[index] = true;
@@ -63,7 +87,7 @@ export default function EditNoteModal({ idNote }) {
           }
         })
         console.log(loadCheck)
-        setCheckedState(loadCheck);
+        setCheckedState(loadCheck);*/
   }, []);
 
   //states
@@ -82,13 +106,16 @@ export default function EditNoteModal({ idNote }) {
     setCheckedState(updatedCheckedState)
   }
   const handleSaveTags = ()=>{
+    //console.log(checkedState);
     checkedState.forEach((item, index) => {
-      if(item){
-        api.post('noteToTags',{noteID: idNote, tagID: tags[index].tagID}, config).catch((error) => console.log(error))
+      if(item === true){
+        //console.log(tags[index].tagID)
+        api.post('noteToTags',{noteID: idNote, tagID: tags[index].tagID}, config).then((response) => console.log('ok')).catch((error) => console.log(error))
       }else{
-        api.delete('noteToTags', {noteID: idNote, tagID: tags[index].tagID}, config).catch((error) => console.log(error))
+        api.delete('noteToTags', {noteID: idNote, tagID: tags[index].tagID}, config).then((response) => console.log('ok, eliminado')).catch((error) => console.log(error))
       }
-    })    
+    })
+    window.location.reload();
   }
   //render
   return (<>
@@ -98,7 +125,7 @@ export default function EditNoteModal({ idNote }) {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <input className='form-control' type='text' value={note.titleNote}
+          <input className='form-control' type='text' defaultValue={note.titleNote}
             onChange={(e) => setNoteTitle(e.target.value)}>
           </input>
         </Modal.Title>
@@ -116,7 +143,7 @@ export default function EditNoteModal({ idNote }) {
                     className="form-check-input"
                     type="checkbox"
                     value={tag.nameTag}
-                    checked={checkedState[index]}
+                    defaulChecked={tag.isChecked}
                     id={'defaultCheck' + index}
                     onChange={() => handleOnChange(index)}
                   />
@@ -128,6 +155,7 @@ export default function EditNoteModal({ idNote }) {
             })}
             <div className='text-end'>
               <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
+            </div>
             </div>
       </Modal.Body>
       <Modal.Footer>
