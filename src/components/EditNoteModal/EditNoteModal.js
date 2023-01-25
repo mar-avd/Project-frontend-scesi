@@ -34,12 +34,15 @@ export default function EditNoteModal({ idNote }) {
       .catch((error) => console.log(error));
   };
   //cargar las etiquetas de una nota
-  let tagsNote = []
+  let tagsNote = [];
   const loadTagsNote = () => {
-    api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
-      tagsNote = response.data;
-    }).catch((error) => console.log(error))
-  }
+    api
+      .get('noteToTags/tags?noteID=' + idNote, config)
+      .then((response) => {
+        tagsNote = response.data;
+      })
+      .catch((error) => console.log(error));
+  };
   // cargar todas las tags de un usuario
   const loadTags = () => {
     api
@@ -59,23 +62,26 @@ export default function EditNoteModal({ idNote }) {
         setAllTags(response.data);
       })
       .catch((error) => console.log(error));
-    api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
-      response.data.forEach(item => {
-        aux.push(item.tagID);
-      });
-      setNoteTags(aux);
-    }).catch((error) => console.log(error))
+    api
+      .get('noteToTags/tags?noteID=' + idNote, config)
+      .then((response) => {
+        response.data.forEach((item) => {
+          aux.push(item.tagID);
+        });
+        setNoteTags(aux);
+      })
+      .catch((error) => console.log(error));
     let loadCheck = [];
-        tags.forEach((tag, index) => {
-          if(tagsNote.indexOf(tag.nameTag) ===! -1){
-            loadCheck[index] = true;
-          }else{
-            loadCheck.push(false);
-          }
-        })
-        console.log(loadCheck)
-        setCheckedState(loadCheck);
-  }, []);
+    tags.forEach((tag, index) => {
+      if (tagsNote.indexOf(tag.nameTag) === !-1) {
+        loadCheck[index] = true;
+      } else {
+        loadCheck.push(false);
+      }
+    });
+    console.log(loadCheck);
+    setCheckedState(loadCheck);
+  };
 
   //states
   const handleClose = () => setShow(false);
@@ -88,36 +94,49 @@ export default function EditNoteModal({ idNote }) {
   };
   const handleOnChange = (position) => {
     const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item
-    )
-    setCheckedState(updatedCheckedState)
-  }
+      index === position ? !item : item,
+    );
+    setCheckedState(updatedCheckedState);
+  };
   const handleSaveTags = () => {
     checkedState.forEach((item, index) => {
       if (item) {
-        api.post('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
+        api
+          .post('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config)
+          .catch((error) => console.log(error));
       } else {
-        api.delete('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
+        api
+          .delete('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config)
+          .catch((error) => console.log(error));
       }
-    })
-  }
+    });
+  };
   //render
-  return (<>
-    <Button variant='btn dropdown-item' onClick={handleShow}>
-      Editar
-    </Button>
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <input defaultValue={note.titleNote}className='form-control' type='text' /* value={note.titleNote}  */
-            onChange={(e) => setNoteTitle(e.target.value)}>
-          </input>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className='container'>
-          <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
-        </div>
+  return (
+    <>
+      <Button variant="btn dropdown-item" onClick={handleShow}>
+        Editar
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <input
+              defaultValue={note.titleNote}
+              className="form-control"
+              type="text" /* value={note.titleNote}  */
+              onChange={(e) => setNoteTitle(e.target.value)}
+            ></input>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <RichEditorExample
+              noteTitle={noteTitle}
+              noteID={idNote}
+              contentHTML={note.contentHTMLNote}
+            ></RichEditorExample>
+          </div>
+          <div>
             <h4>Cambiar etiquetas:</h4>
             {tags.map((tag, index) => {
               return (
@@ -136,21 +155,24 @@ export default function EditNoteModal({ idNote }) {
                 </div>
               );
             })}
-            <div className='text-end'>
-              <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
+            <div className="text-end">
+              <button className="btn btn-sm btn-primary" onClick={handleSaveTags}>
+                <i className="bi bi-tag"></i> Asignar etiquetas
+              </button>
             </div>
-            </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <div className="col text-center">
-          <small className="">
-            <p >
-              Ultima modificación &nbsp;
-              {moment(note.modificationDate).format('llll')}
-            </p>
-          </small>
-        </div>
-      </Modal.Footer>
-    </Modal>
-  </>)
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="col text-center">
+            <small className="">
+              <p>
+                Ultima modificación &nbsp;
+                {moment(note.modificationDate).format('llll')}
+              </p>
+            </small>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
