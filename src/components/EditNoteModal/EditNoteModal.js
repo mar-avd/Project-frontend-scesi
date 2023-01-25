@@ -55,15 +55,15 @@ export default function EditNoteModal({ idNote }) {
       tagsNote = response.data;
     }).catch((error) => console.log(error))
     let loadCheck = [];
-        tags.forEach((tag, index) => {
-          if(tagsNote.indexOf(tag.nameTag) ===! -1){
-            loadCheck[index] = true;
-          }else{
-            loadCheck.push(false);
-          }
-        })
-        console.log(loadCheck)
-        setCheckedState(loadCheck);
+    tags.forEach((tag, index) => {
+      if (tagsNote.indexOf(tag.nameTag) === ! -1) {
+        loadCheck[index] = true;
+      } else {
+        loadCheck.push(false);
+      }
+    })
+    console.log(loadCheck)
+    setCheckedState(loadCheck);
   }, []);
 
   //states
@@ -72,23 +72,23 @@ export default function EditNoteModal({ idNote }) {
   const handleShow = () => {
     loadNote();
     //loadTagsNote()
-        
+
     setShow(true);
   };
   const handleOnChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) => 
+    const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? !item : item
     )
     setCheckedState(updatedCheckedState)
   }
-  const handleSaveTags = ()=>{
+  const handleSaveTags = () => {
     checkedState.forEach((item, index) => {
-      if(item){
-        api.post('noteToTags',{noteID: idNote, tagID: tags[index].tagID}, config).catch((error) => console.log(error))
-      }else{
-        api.delete('noteToTags', {noteID: idNote, tagID: tags[index].tagID}, config).catch((error) => console.log(error))
+      if (item) {
+        api.post('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
+      } else {
+        api.delete('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
       }
-    })    
+    })
   }
   //render
   return (<>
@@ -108,27 +108,28 @@ export default function EditNoteModal({ idNote }) {
           <RichEditorExample noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
         <div>
-            <h4>Cambiar etiquetas:</h4>
-            {tags.map((tag, index) => {
-              return (
-                <div className="form-check" key={index}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value={tag.nameTag}
-                    checked={checkedState[index]}
-                    id={'defaultCheck' + index}
-                    onChange={() => handleOnChange(index)}
-                  />
-                  <label className="form-check-label" htmlFor={'defaultCheck' + index}>
-                    {tag.nameTag}
-                  </label>
-                </div>
-              );
-            })}
-            <div className='text-end'>
-              <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
-            </div>
+          <h4>Cambiar etiquetas:</h4>
+          {tags.map((tag, index) => {
+            return (
+              <div className="form-check" key={index}>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value={tag.nameTag}
+                  checked={checkedState[index]}
+                  id={'defaultCheck' + index}
+                  onChange={() => handleOnChange(index)}
+                />
+                <label className="form-check-label" htmlFor={'defaultCheck' + index}>
+                  {tag.nameTag}
+                </label>
+              </div>
+            );
+          })}
+          <div className='text-end'>
+            <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
+          </div>
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <div className="col text-center">
