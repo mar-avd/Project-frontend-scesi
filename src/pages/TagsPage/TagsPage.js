@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { api } from "../../config/site.config";
 import AuthService from '../../config/auth.service';
 import EditTagModal from "../../components/EditTagModal/EditTagModal";
+import ConfirmDelete from "../../components/ConfirmDelete/ConfirmDelete";
 
 export default function TagsPage() {
     const [tags, setTags] = useState([]);
@@ -43,12 +44,6 @@ export default function TagsPage() {
             .catch((error) => console.log(error));
     }
 
-    const deleteTag = async (tagID) => {
-        api.delete('tag?tagID=' + tagID, config).then(() => {
-            window.location.reload()
-        }).catch((error) => console.log(error))
-    }
-
     // RENDER
     return (
         <div className="py-3">
@@ -70,12 +65,10 @@ export default function TagsPage() {
                                 <td>{tag.nameTag}</td>
                                 <td>
                                     <form onSubmit={(e) => { e.preventDefault(); editNameTag(tag.tagID) }}>
-                                        {/* <input type="text" className="form-control" placeholder="Nombre de etiqueta"
-                                            required onChange={(e) => setEditNameTag(e.target.value)} /> */}
                                         <EditTagModal tagID={tag.tagID}></EditTagModal>
                                     </form>
                                 </td>
-                                <td><button type="submit" onClick={(e) => (deleteTag(tag.tagID))}>Eliminar</button></td>
+                                <td><ConfirmDelete elementID={tag.tagID}></ConfirmDelete></td>
                             </tr>
                         )
                     })}

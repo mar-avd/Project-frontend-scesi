@@ -24,7 +24,8 @@ class AuthService {
       .then((response) => {
         console.log(response.data)
         return response.data;
-      });
+      })
+      .catch((error) => console.error(error));
   }
   logout() {
     storageDelete('user');

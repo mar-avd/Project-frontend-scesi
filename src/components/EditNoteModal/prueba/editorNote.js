@@ -101,9 +101,15 @@ export default class RichEditorExample extends React.Component {
             .catch((error) => console.log(error));
     }
 
+    copyToClipboard(editorState) {
+        const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText)
+            return navigator.clipboard.writeText(conversionHTML);
+        return Promise.reject("The Clipboard API is not available.");
+    }
+
     // Para actualizar los contentHTML de mi nota 
     getConversion(editorState) {
-        console.log(convertToRaw(editorState.getCurrentContent()));
         const user = AuthService.getCurrentUser();
         const config = {
             headers: { Authorization: `Bearer ${user.token}` },
@@ -163,9 +169,16 @@ export default class RichEditorExample extends React.Component {
                         />
                     </div>
                 </div>
-                <div className='py-3 text-end'>
-                    <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
+                <div className='py-3'>
+                    <div className='text-start'>
+                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i class="bi bi-clipboard"></i></button>
+                    </div>
+                    <div className='text-end'>
+                        <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
+                    </div>
                 </div>
+
+
             </div>
         );
     }
