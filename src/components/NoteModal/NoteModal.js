@@ -50,7 +50,7 @@ export default function NoteModal({ idNote }) {
           <Modal.Title>{note.titleNote}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>{note.contentNote}</p>
+          <p dangerouslySetInnerHTML={{ __html: note.contentHTMLNote }}></p>
           <div>
             {tags.map((tag, index) => {
               return(<span className="badge text-bg-primary mx-1" key={index}>{tag.tags.nameTag}</span>)

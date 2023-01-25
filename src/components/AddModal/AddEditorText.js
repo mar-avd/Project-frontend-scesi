@@ -1,18 +1,18 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import '../prueba/RichEditor.css'
-import AuthService from '../../../config/auth.service';
-import { api } from "../../../config/site.config";
+import '../EditNoteModal/prueba/RichEditor.css'
+import AuthService from '../../config/auth.service';
+import { api } from "../../config/site.config";
 
 
-export default class RichEditorExample extends React.Component {
+export default class AddEditorText extends React.Component {
     constructor(props) {
         super(props);
 
         this.content = "";
         this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
-        this.noteID = this.props;
+        this.titleNote = this.props;
 
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({ editorState });
@@ -21,20 +21,6 @@ export default class RichEditorExample extends React.Component {
         this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
         this.toggleBlockType = this._toggleBlockType.bind(this);
         this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
-    }
-
-
-    componentDidMount() {
-        const user = AuthService.getCurrentUser();
-        const config = {
-            headers: { Authorization: `Bearer ${user.token}` },
-        };
-
-        api.get(`note/oneNote?noteID=${this.props.noteID}`, config)
-            .then((response) => {
-                this.setState({ editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(response.data.contentHTMLNote))) })
-            })
-            .catch((error) => console.log(error));
     }
 
     _handleKeyCommand(command, editorState) {
@@ -86,24 +72,9 @@ export default class RichEditorExample extends React.Component {
         );
     }
 
-
-    getContentHTML() {
-        const user = AuthService.getCurrentUser();
-        const config = {
-            headers: { Authorization: `Bearer ${user.token}` },
-        };
-
-        api.get(`note/oneNote?noteID=${this.props.noteID}`, config)
-            .then((response) => {
-                const data = response.data.contentHTMLNote;
-                return data;
-            })
-            .catch((error) => console.log(error));
-    }
-
-    // Para actualizar los contentHTML de mi nota 
+    // Para convertir html a cadena
     getConversion(editorState) {
-        console.log(convertToRaw(editorState.getCurrentContent()));
+
         const user = AuthService.getCurrentUser();
         const config = {
             headers: { Authorization: `Bearer ${user.token}` },
@@ -116,11 +87,10 @@ export default class RichEditorExample extends React.Component {
             .blocks.forEach(element => {
                 conversionString += " " + element.text;
             });
-        // guarda la nota editada
-        api.patch(`note?noteID=${this.props.noteID}`, { titleNote: this.props.noteTitle, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+// Para guardar contenidos de la nota 
+        api.post('note', {titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
             .then((response) => {
                 window.location.reload();
-                console.log(response);
             })
             .catch((error) => console.log(error));
     };
@@ -157,14 +127,14 @@ export default class RichEditorExample extends React.Component {
                             handleKeyCommand={this.handleKeyCommand}
                             keyBindingFn={this.mapKeyToEditorCommand}
                             onChange={this.onChange}
-                            placeholder="Escribe tu nota"
+                            placeholder ="Escribe tu nota aqui..."
                             ref="editor"
                             spellCheck={true}
                         />
                     </div>
                 </div>
                 <div className='py-3 text-end'>
-                    <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
+                    <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Agregar</button>
                 </div>
             </div>
         );
