@@ -34,21 +34,21 @@ export default function EditNoteModal({ idNote }) {
       .catch((error) => console.log(error));
   };
   //cargar las etiquetas de una nota
-  //let tagsNote = []
-  /*const loadTagsNote = () => {
+  let tagsNote = []
+  const loadTagsNote = () => {
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
       tagsNote = response.data;
     }).catch((error) => console.log(error))
-  }*/
+  }
   // cargar todas las tags de un usuario
-  /*const loadTags = () => {
+  const loadTags = () => {
     api
       .get('tag', config)
       .then((response) => {
         setTags(response.data);
       })
       .catch((error) => console.log(error));
-  };*/
+  };
   const [allTags, setAllTags] = useState([]);
   const [noteTags, setNoteTags] = useState([]);
   const loadingTags = () => {
@@ -65,20 +65,7 @@ export default function EditNoteModal({ idNote }) {
       });
       setNoteTags(aux);
     }).catch((error) => console.log(error))
-    allTags.forEach(tag => {
-      if(noteTags.indexOf(tag.tagID) !== -1){
-        tag['isChecked'] = true;
-      }else{
-        tag['isChecked'] = false;
-      }
-    })
-  }
-  useEffect(() => {
-    loadingTags();
-    setTags(allTags);
-     console.log(noteTags)
-    //setCheckedState(allTags)
-    /*let loadCheck = [];
+    let loadCheck = [];
         tags.forEach((tag, index) => {
           if(tagsNote.indexOf(tag.nameTag) ===! -1){
             loadCheck[index] = true;
@@ -87,7 +74,7 @@ export default function EditNoteModal({ idNote }) {
           }
         })
         console.log(loadCheck)
-        setCheckedState(loadCheck);*/
+        setCheckedState(loadCheck);
   }, []);
 
   //states
@@ -96,26 +83,23 @@ export default function EditNoteModal({ idNote }) {
   const handleShow = () => {
     loadNote();
     //loadTagsNote()
-        
+
     setShow(true);
   };
   const handleOnChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) => 
+    const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? !item : item
     )
     setCheckedState(updatedCheckedState)
   }
-  const handleSaveTags = ()=>{
-    //console.log(checkedState);
+  const handleSaveTags = () => {
     checkedState.forEach((item, index) => {
-      if(item === true){
-        //console.log(tags[index].tagID)
-        api.post('noteToTags',{noteID: idNote, tagID: tags[index].tagID}, config).then((response) => console.log('ok')).catch((error) => console.log(error))
-      }else{
-        api.delete('noteToTags', {noteID: idNote, tagID: tags[index].tagID}, config).then((response) => console.log('ok, eliminado')).catch((error) => console.log(error))
+      if (item) {
+        api.post('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
+      } else {
+        api.delete('noteToTags', { noteID: idNote, tagID: tags[index].tagID }, config).catch((error) => console.log(error))
       }
     })
-    window.location.reload();
   }
   //render
   return (<>
@@ -125,16 +109,15 @@ export default function EditNoteModal({ idNote }) {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <input className='form-control' type='text' defaultValue={note.titleNote}
+          <input defaultValue={note.titleNote}className='form-control' type='text' /* value={note.titleNote}  */
             onChange={(e) => setNoteTitle(e.target.value)}>
           </input>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className='container'>
-          <RichEditorExample noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
+          <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
-        <div>
             <h4>Cambiar etiquetas:</h4>
             {tags.map((tag, index) => {
               return (
