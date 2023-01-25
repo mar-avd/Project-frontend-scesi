@@ -98,38 +98,36 @@ export default function EditNoteModal({ idNote }) {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <input className='form-control' type='text' value={note.titleNote}
+          <input defaultValue={note.titleNote}className='form-control' type='text' /* value={note.titleNote}  */
             onChange={(e) => setNoteTitle(e.target.value)}>
           </input>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className='container'>
-          <RichEditorExample noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
+          <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
-        <div>
-          <h4>Cambiar etiquetas:</h4>
-          {tags.map((tag, index) => {
-            return (
-              <div className="form-check" key={index}>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value={tag.nameTag}
-                  checked={checkedState[index]}
-                  id={'defaultCheck' + index}
-                  onChange={() => handleOnChange(index)}
-                />
-                <label className="form-check-label" htmlFor={'defaultCheck' + index}>
-                  {tag.nameTag}
-                </label>
-              </div>
-            );
-          })}
-          <div className='text-end'>
-            <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
-          </div>
-        </div>
+            <h4>Cambiar etiquetas:</h4>
+            {tags.map((tag, index) => {
+              return (
+                <div className="form-check" key={index}>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value={tag.nameTag}
+                    checked={checkedState[index]}
+                    id={'defaultCheck' + index}
+                    onChange={() => handleOnChange(index)}
+                  />
+                  <label className="form-check-label" htmlFor={'defaultCheck' + index}>
+                    {tag.nameTag}
+                  </label>
+                </div>
+              );
+            })}
+            <div className='text-end'>
+              <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
+            </div>
       </Modal.Body>
       <Modal.Footer>
         <div className="col text-center">
