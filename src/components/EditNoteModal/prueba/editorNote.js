@@ -171,7 +171,7 @@ export default class RichEditorExample extends React.Component {
                 </div>
                 <div className='py-3'>
                     <div className='text-start'>
-                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i class="bi bi-clipboard"></i></button>
+                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i className="bi bi-clipboard"></i></button>
                     </div>
                     <div className='text-end'>
                         <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
