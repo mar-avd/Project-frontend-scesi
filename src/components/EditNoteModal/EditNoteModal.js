@@ -34,12 +34,12 @@ export default function EditNoteModal({ idNote }) {
       .catch((error) => console.log(error));
   };
   //cargar las etiquetas de una nota
-  let tagsNote = []
-  const loadTagsNote = () => {
+  //let tagsNote = []
+  /*const loadTagsNote = () => {
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
       tagsNote = response.data;
     }).catch((error) => console.log(error))
-  }
+  }*/
   // cargar todas las tags de un usuario
   const loadTags = () => {
     api
@@ -52,18 +52,25 @@ export default function EditNoteModal({ idNote }) {
   useEffect(() => {
     loadTags();
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
-      tagsNote = response.data;
+      const tagsNote = response.data;
+      let loadCheck = [];
+      console.log('estos son los tags')
+      console.log(tags)
+      console.log("tagsNote", tagsNote)
+      const checked = tags.map((tag, index) => {
+        return !!(tagsNote.find(tagN => tagN.tags.nameTag === tag.nameTag))
+      })
+      console.log("checked:", checked)
+      setCheckedState(checked);
+
     }).catch((error) => console.log(error))
-    let loadCheck = [];
-    tags.forEach((tag, index) => {
-      if (tagsNote.indexOf(tag.nameTag) === ! -1) {
+    /*tags.forEach((tag, index) => {
+      if (tagsNote.indexOf(tag.nameTag) !== -1) {
         loadCheck[index] = true;
       } else {
         loadCheck.push(false);
       }
-    })
-    console.log(loadCheck)
-    setCheckedState(loadCheck);
+    })*/
   }, []);
 
   //states
