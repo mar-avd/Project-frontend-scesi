@@ -98,16 +98,15 @@ export default function EditNoteModal({ idNote }) {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <input className='form-control' type='text' value={note.titleNote}
+          <input defaultValue={note.titleNote}className='form-control' type='text' /* value={note.titleNote}  */
             onChange={(e) => setNoteTitle(e.target.value)}>
           </input>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className='container'>
-          <RichEditorExample noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
+          <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
-        <div>
             <h4>Cambiar etiquetas:</h4>
             {tags.map((tag, index) => {
               return (

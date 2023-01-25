@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { api } from "../../config/site.config";
 import AuthService from '../../config/auth.service';
-import { useNavigate } from "react-router-dom";
+import AddEditorText from './AddEditorText';
 
 export default function AddModal() {
   const [show, setShow] = useState(false);
@@ -11,36 +11,10 @@ export default function AddModal() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   
-  // navegacion
-  let navigate = useNavigate();
-
-  // Verificacion de usr con Token
-  const user = AuthService.getCurrentUser();
-        const config = {
-          headers: { Authorization: `Bearer ${user.token}` },
-        };
-  
   /* Set Datos imput */
+  const [note, setNote] = useState({});
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
-
-  function handleSubmit() {
-    console.log(noteTitle,noteContent);
-    setNoteTitle("") ;
-    setNoteContent("");
-  };
-
-  const addNote = () => {
-    api.post('note', {
-      titleNote: noteTitle,
-      contentNote: noteContent
-    }, config).then((response)=>{
-        handleSubmit();
-        // sdasdsa
-        window.location.reload();
-        return "nota creada";
-    }).catch((error)=>console.log(error))
-  }
 
   //render
   return (
@@ -51,25 +25,19 @@ export default function AddModal() {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className='noteTitle'>
-              <input type='text' className='form-control' placeholder='titulo' required
+              <input type='text' className='form-control' placeholder='Titulo' required
               onChange={(e)=> setNoteTitle(e.target.value)}
               value={noteTitle}/>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className='noteContent'>
-            {/* recuperar dato intruducido */}
-            <input type='text' className='form-control' placeholder='escriba aqui' required
-            onChange={(e)=> setNoteContent(e.target.value)}
-            value={noteContent}/>
+          <AddEditorText titleNote= {noteTitle} contentHTML={note.contentHTMLNote}></AddEditorText>
         </Modal.Body>
         <Modal.Footer>
-          <Button className='btnClose' variant="secondary" onClick={handleClose}>
-            Cancelar
-          </Button>
           {/* add note and handleDesarchivar desactive */}
-          <Button variant="primary" onClick={() => addNote()}>
+          {/* <Button variant="primary" onClick={() => addNote()}>
             Agregar
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
     </div>
