@@ -6,8 +6,10 @@ import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import editorNote from './prueba/editorNote';
 import RichEditorExample from './prueba/editorNote';
+import useTags from './useTags';
 
 export default function EditNoteModal({ idNote }) {
+  const [tagsSelected, addTag, deleteTag] = useTags(idNote);
   //states
   const [show, setShow] = useState(false);
   const [note, setNote] = useState({});
@@ -16,7 +18,7 @@ export default function EditNoteModal({ idNote }) {
   //
   /* Set Datos imput */
   const [noteTitle, setNoteTitle] = useState('');
-  const [noteContent, setNoteContent] = useState('');
+  //const [noteContent, setNoteContent] = useState('');
   //
 
   const user = AuthService.getCurrentUser();
@@ -115,23 +117,23 @@ export default function EditNoteModal({ idNote }) {
           <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
             <h4>Cambiar etiquetas:</h4>
-            {tags.map((tag, index) => {
-              return (
-                <div className="form-check" key={index}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value={tag.nameTag}
-                    checked={checkedState[index]}
-                    id={'defaultCheck' + index}
-                    onChange={() => handleOnChange(index)}
-                  />
-                  <label className="form-check-label" htmlFor={'defaultCheck' + index}>
-                    {tag.nameTag}
-                  </label>
-                </div>
-              );
-            })}
+            <select className='form-select'>
+              <option defaultValue={'selecciona los tags'}>Selecciona los tags</option>
+              {tags.map((tag, index) => {
+                return(
+                  <option value={tag.tagID} key={index} onClick={() => addTag({tagID: tag.tagID, tags: {nameTag: tag.nameTag}})}>{tag.nameTag}</option>
+                )
+              })}
+            </select>
+            <div className='my-3'>
+              {tagsSelected.map((tagSelect, index) => {
+                return(
+                  <span className='badge text-bg-primary mx-1' key={index}>{tagSelect.tags.nameTag}
+                    <button className='btn-close btn-close-white' onClick={() => deleteTag(tagSelect.tagID)}></button>
+                  </span>
+                )
+              })}
+            </div>
             <div className='text-end'>
               <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
             </div>
