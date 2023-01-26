@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import editorNote from './prueba/editorNote';
 import RichEditorExample from './prueba/editorNote';
 import useTags from './useTags';
+import SelectTags from './SelectTags';
 
 export default function EditNoteModal({ idNote }) {
   const [tagsSelected, addTag, deleteTag] = useTags(idNote);
@@ -15,6 +16,7 @@ export default function EditNoteModal({ idNote }) {
   const [note, setNote] = useState({});
   const [tags, setTags] = useState([]);
   const [checkedState, setCheckedState] = useState([]);
+  const [tagsNote, setTagsNote] = useState([])
   //
   /* Set Datos imput */
   const [noteTitle, setNoteTitle] = useState('');
@@ -37,11 +39,11 @@ export default function EditNoteModal({ idNote }) {
   };
   //cargar las etiquetas de una nota
   //let tagsNote = []
-  /*const loadTagsNote = () => {
+  const loadTagsNote = () => {
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
-      tagsNote = response.data;
+      setTagsNote(response.data);
     }).catch((error) => console.log(error))
-  }*/
+  }
   // cargar todas las tags de un usuario
   const loadTags = () => {
     api
@@ -53,7 +55,8 @@ export default function EditNoteModal({ idNote }) {
   };
   useEffect(() => {
     loadTags();
-    api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
+    loadTagsNote();
+    /*api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
       const tagsNote = response.data;
       let loadCheck = [];
       console.log('estos son los tags')
@@ -65,7 +68,7 @@ export default function EditNoteModal({ idNote }) {
       console.log("checked:", checked)
       setCheckedState(checked);
 
-    }).catch((error) => console.log(error))
+    }).catch((error) => console.log(error))*/
     /*tags.forEach((tag, index) => {
       if (tagsNote.indexOf(tag.nameTag) !== -1) {
         loadCheck[index] = true;
@@ -116,7 +119,7 @@ export default function EditNoteModal({ idNote }) {
         <div className='container'>
           <RichEditorExample noteTitle={noteTitle} noteID={idNote} contentHTML={note.contentHTMLNote}></RichEditorExample>
         </div>
-            <h4>Cambiar etiquetas:</h4>
+           {/* <h4>Cambiar etiquetas:</h4>
             <select className='form-select'>
               <option defaultValue={'selecciona los tags'}>Selecciona los tags</option>
               {tags.map((tag, index) => {
@@ -133,10 +136,11 @@ export default function EditNoteModal({ idNote }) {
                   </span>
                 )
               })}
-            </div>
+            </div>*/}
             <div className='text-end'>
               <button className='btn btn-sm btn-primary' onClick={handleSaveTags}><i className='bi bi-tag'></i> Asignar etiquetas</button>
             </div>
+            <SelectTags idNote={idNote} tagsInitial={tagsNote}></SelectTags>
       </Modal.Body>
       <Modal.Footer>
         <div className="col text-center">
