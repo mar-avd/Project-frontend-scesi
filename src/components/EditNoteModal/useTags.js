@@ -4,6 +4,7 @@ import AuthService from '../../config/auth.service';
 
 const useTags = (tagsInitial) => {
   const [tagsNote, setTagsNote] = useState(tagsInitial);
+  const [removeTags,setRemoveTags] = useState([]);
 
   const user = AuthService.getCurrentUser();
   const config = {
@@ -31,11 +32,12 @@ const useTags = (tagsInitial) => {
   };
 
   const deleteTag = (tagId) => {
+    setRemoveTags([...removeTags, tagId])
       setTagsNote(tagsNote.filter(tagNote => tagNote.tagID !== tagId))
       console.log(tagsNote);
   };
 
-  return [tagsNote, addTag, deleteTag];
+  return [tagsNote, addTag, deleteTag, removeTags];
 };
 
 export default useTags;
