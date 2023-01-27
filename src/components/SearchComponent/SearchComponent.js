@@ -50,8 +50,8 @@ export default function SearchComponent() {
   };
   return (
     <>
-      <nav className="navbar navbar-expand-sm bg-light">
-        <div className="container-fluid">
+      <nav className="navbar navbar-expand-sm ">
+        <div className="container-fluid"> 
           <button
             className="navbar-toggler"
             type="button"
@@ -73,7 +73,7 @@ export default function SearchComponent() {
                   setSearchInput(e.target.value);
                 }}
               />
-              <button className="btn btn-outline-success" onClick={handlerSearch}>
+              <button className="btn btn-outline-primary" onClick={handlerSearch}>
                 Search
               </button>
             </div>

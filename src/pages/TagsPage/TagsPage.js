@@ -74,10 +74,10 @@ export default function TagsPage() {
                     })}
                 </tbody>
             </table>
-            <form onSubmit={(e) => { e.preventDefault(); addTag() }}>
+            <form className="container" onSubmit={(e) => { e.preventDefault(); addTag() }}>
                 <input type="text" className="form-control" placeholder="Nombre de etiqueta"
                     required onChange={(e) => setNameTag(e.target.value)} value={nameTag} />
-                <button type="submit">Agregar etiqueta</button>
+                <button type="submit" className="btn btn-primary">Agregar etiqueta</button>
             </form>
 
         </div >

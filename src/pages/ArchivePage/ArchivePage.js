@@ -32,7 +32,8 @@ export default function ArchivePage() {
     api
       .patch('note?noteID=' + noteID, { statusNote: 'main' }, config)
       .then((response) => {
-        navigate('/');
+        window.location.reload()
+        // navigate('/');
       })
       .catch((error) => console.log(error));
   };

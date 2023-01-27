@@ -35,8 +35,8 @@ export default function ConfirmDelete(props) {
     //render
     return (
         <div>
-            <Button variant='light' onClick={handleShow}>
-                <i class="bi bi-x-octagon-fill"></i>
+            <Button variant='danger' onClick={handleShow}>
+                <i className="bi bi-x-octagon-fill"></i>
             </Button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -48,10 +48,10 @@ export default function ConfirmDelete(props) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                    <Button className='btnClose' variant="secondary" onClick={handleClose}>
+                    <Button className='btnClose' variant="primary" onClick={handleClose}>
                         Cancelar
                     </Button>
-                    <Button variant="btn btn-warning" onClick={() => confirmDelete(props.elementID)}>
+                    <Button variant="btn btn-danger" onClick={() => confirmDelete(props.elementID)}>
                         Confirmar
                     </Button>
                 </Modal.Footer>

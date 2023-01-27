@@ -40,7 +40,7 @@ export default function EditTagModal(props) {
     //render
     return (
         <div>
-            <Button variant='light' onClick={handleShow}>
+            <Button variant='primary' onClick={handleShow}>
                 <i className="bi bi-magic"></i>
             </Button>
             <Modal show={show} onHide={handleClose}>

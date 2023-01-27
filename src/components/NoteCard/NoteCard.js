@@ -17,7 +17,8 @@ export default function NoteCard({ note }) {
     api
       .patch('note?noteID=' + noteID, { statusNote: 'archivado' }, config)
       .then((response) => {
-        navigate('/archivados');
+        window.location.reload()
+        // navigate('/archivados');
       })
       .catch((error) => console.log(error));
   };
@@ -25,7 +26,9 @@ export default function NoteCard({ note }) {
     api
       .patch('note?noteID=' + noteID, { statusNote: 'papelera' }, config)
       .then((response) => {
-        navigate('/papelera');
+        setTimeout(() => { console.log("Hola") }, 10000);
+        window.location.reload()
+        // navigate('/papelera');
       })
       .catch((error) => console.log(error));
   };
@@ -39,22 +42,22 @@ export default function NoteCard({ note }) {
   };
   //render
   return (
-    <div className="col py-3">
+    <div className="col py-3" >
       <div className="card">
-        <div className="card-header">
+        <div className="card-header" style={{background:'#e3f2fd'}}>
           <h4 className="card-title">{note.titleNote}</h4>
         </div>
-        <div className="card-body">
+        <div className="card-body" style={{overflow:'hidden', maxHeight:'21rem'}}>
           <p className="card-text" dangerouslySetInnerHTML={{ __html: note.contentHTMLNote }}>{/* {note.contentHTMLNote.substr(0, 239)} */}</p>
         </div>
-        <div className="card-footer d-flex justify-content-between ">
+        <div className="card-footer d-flex justify-content-between " style={{background:'#e3f2fd'}}>
           <div className="d-flex align-items-center">
             <small className="text-muted">
               Creado el&nbsp;{moment(note.creationDate).format('L')}
             </small>
           </div>
-          <div className="dropdown">
-            <button className="btn dropdown-toggle" data-bs-toggle="dropdown"></button>
+          <div className="dropdown" style={{borderRadius: '20%'}}>
+            <button className="btn dropdown-toggle" data-bs-toggle="dropdown" ></button>
             <ul className="dropdown-menu">
               <li>
                 <NoteModal idNote={note.noteID} />

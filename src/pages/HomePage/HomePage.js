@@ -41,7 +41,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className="row row-cols-md-3">
-        <h3 className="pb-3">Notas importantes</h3>
+        <h2 className="pb-3">Notas importantes</h2>
         {importantNotes.map((impNote, index) => {
           return <NoteCard key={index} note={impNote} />;
         })}

@@ -14,7 +14,8 @@ export default class RichEditorExample extends React.Component {
         this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
         this.noteID = this.props;
 
-        this.focus = () => this.refs.editor.focus();
+        this.focus = React.createRef();
+
         this.onChange = (editorState) => this.setState({ editorState });
 
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -123,7 +124,22 @@ export default class RichEditorExample extends React.Component {
                 conversionString += " " + element.text;
             });
         // guarda la nota editada
-        api.patch(`note?noteID=${this.props.noteID}`, { titleNote: this.props.noteTitle, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+        let refreshNoteTitle = () => {
+            if (this.props.noteTitle === "") {
+                api.get(`note/oneNote?noteID=${this.props.noteID}`, config)
+                    .then((response) => {
+                        return response.data.titleNote
+                    })
+            } else {
+                return this.props.noteTitle;
+            }
+        }
+
+        api.patch(`note?noteID=${this.props.noteID}`, {
+            titleNote: refreshNoteTitle(),
+            contentNote: conversionString,
+            contentHTMLNote: conversionHTML
+        }, config)
             .then((response) => {
                 window.location.reload();
                 console.log(response);
@@ -155,7 +171,7 @@ export default class RichEditorExample extends React.Component {
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}
                     />
-                    <div className={className} onClick={this.focus}>
+                    <div className={className} /* onClick={this.focus} */>
                         <Editor
                             blockStyleFn={getBlockStyle}
                             customStyleMap={styleMap}
@@ -164,14 +180,14 @@ export default class RichEditorExample extends React.Component {
                             keyBindingFn={this.mapKeyToEditorCommand}
                             onChange={this.onChange}
                             placeholder="Escribe tu nota"
-                            ref="editor"
+                            ref={this.focus}
                             spellCheck={true}
                         />
                     </div>
                 </div>
                 <div className='py-3'>
                     <div className='text-start'>
-                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i class="bi bi-clipboard"></i></button>
+                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i className="bi bi-clipboard"></i></button>
                     </div>
                     <div className='text-end'>
                         <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>

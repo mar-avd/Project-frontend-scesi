@@ -19,8 +19,8 @@ export default function AddModal() {
   //render
   return (
     <div>
-      <Button variant='light' onClick={handleShow}>
-        <i className="bi bi-plus-circle-fill"></i>
+      <Button variant='primary' onClick={handleShow} >
+        <i className="bi bi-plus-circle-fill" style={{color:'#e3f2fd'}}></i>
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

@@ -23,7 +23,7 @@ export default function RegisterModal() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const {login} = authAction;
+  const { login } = authAction;
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   //handlers
@@ -46,12 +46,12 @@ export default function RegisterModal() {
   //render
   return (
     <span className="">
-        <Button className='BotonSignUp' variant='secondary' onClick={handleShow}>
+      <Button className='BotonSignUp' variant='secondary' onClick={handleShow}>
         Sign Up
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Regístrate</Modal.Title>
+          <Modal.Title >Regístrate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit(handleRegister)}>

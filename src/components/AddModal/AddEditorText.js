@@ -14,7 +14,7 @@ export default class AddEditorText extends React.Component {
         this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
         this.titleNote = this.props;
 
-        this.focus = () => this.refs.editor.focus();
+        this.focus = React.createRef();
         this.onChange = (editorState) => this.setState({ editorState });
 
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -119,7 +119,7 @@ export default class AddEditorText extends React.Component {
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}
                     />
-                    <div className={className} onClick={this.focus}>
+                    <div className={className} /* onClick={this.focus} */>
                         <Editor
                             blockStyleFn={getBlockStyle}
                             customStyleMap={styleMap}
@@ -128,7 +128,7 @@ export default class AddEditorText extends React.Component {
                             keyBindingFn={this.mapKeyToEditorCommand}
                             onChange={this.onChange}
                             placeholder ="Escribe tu nota aqui..."
-                            ref="editor"
+                            ref={this.focus}
                             spellCheck={true}
                         />
                     </div>

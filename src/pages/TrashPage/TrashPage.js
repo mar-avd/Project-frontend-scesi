@@ -32,7 +32,8 @@ export default function TrashPage() {
     api
       .patch('note?noteID=' + noteID, { statusNote: 'main' }, config)
       .then(() => {
-        navigate('/');
+        window.location.reload()
+        // navigate('/');
       })
       .catch((error) => console.log(error));
   };
@@ -51,6 +52,9 @@ export default function TrashPage() {
             <th scope="col">
               <i className="bi bi-check-square-fill"></i>
             </th>
+            <th scope="col">
+              <i class="bi bi-x-square-fill"></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -63,16 +67,12 @@ export default function TrashPage() {
                 <td>{moment(note.creationDate).format('llll')}</td>
                 <td>{moment(note.modificationDate).format('llll')}</td>
                 <td>
-                  <div>
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => handlerRestore(note.noteID)}
-                    >
-                      Recuperar
-                    </button>
-                    <DeleteNoteModal idNote={note.noteID} />
-                  </div>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handlerRestore(note.noteID)}
+                  > Recuperar </button>
                 </td>
+                <td><DeleteNoteModal idNote={note.noteID} /></td>
               </tr>
             );
           })}

@@ -54,10 +54,10 @@ export default function Login() {
         <div className="container d-flex vh-100 justify-content-center align-items-center">
           <div className="text center">
             <div className="form car header text-center">
-              <h3 className="titulo text-black">NoteScesi</h3>
+              <h3 className="titulo">MaiwaNote</h3>
               <div className="entradas">
                 <div className="mb-3">
-                  <input type="text" className="form-control" placeholder="email"
+                  <input type="text" className="form-control" placeholder="username"
                     {...register('username', { required: true })} />
                   {errors.email && <span className="badge text-bg-danger">This field is required</span>}
                 </div>
