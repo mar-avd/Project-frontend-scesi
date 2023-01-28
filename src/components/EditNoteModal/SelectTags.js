@@ -32,11 +32,17 @@ export default function SelectTags({ idNote, tagsInitial }) {
     });
     removeTags.forEach((tag) => {
       api
-        .delete('noteToTags', { noteID: idNote, tagID: tag }, config)
+        .delete('noteToTags', {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          },
+          data: { noteID: idNote, tagID: tag }
+        })
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
     });
     console.log('ok');
+    window.location.reload();
     //console.log('tagsOk', tagsSelected)
   };
   //render

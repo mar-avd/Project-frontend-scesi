@@ -53,7 +53,7 @@ export default function TrashPage() {
               <i className="bi bi-check-square-fill"></i>
             </th>
             <th scope="col">
-              <i class="bi bi-x-square-fill"></i>
+              <i className="bi bi-x-square-fill"></i>
             </th>
           </tr>
         </thead>

@@ -43,7 +43,7 @@ export default function EditNoteModal({ idNote }) {
     api.get('noteToTags/tags?noteID=' + idNote, config).then((response) => {
       setTagsNote(response.data);
     }).catch((error) => console.log(error))
-  }*/
+  }
   // cargar todas las tags de un usuario
   const loadTags = () => {
     api
