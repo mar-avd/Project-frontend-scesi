@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import SearchComponent from './components/SearchComponent/SearchComponent';
 
 function App() {
-  const isLoggedIn = useSelector((state) => state.Auth.idToken)
+  const isLoggedIn = useSelector((state) => state.Auth.idToken);
   //options
   let sideBarOptions = [
     { option: 'Mis notas', icon: 'bi bi-grid-fill', to: '/' },
@@ -21,47 +21,57 @@ function App() {
     { option: 'Archivados', icon: 'bi bi-archive-fill', to: '/archivados' },
     { option: 'Papelera', icon: 'bi bi-trash-fill', to: '/papelera' },
   ];
-  
+
   //render
   return (
     <BrowserRouter>
       <div className="container-fluid px-0">
-        {isLoggedIn ? (<div className="row">
-          <div className="col-3">
-            <SideBar sideBarOptions={sideBarOptions} />
+        {isLoggedIn ? (
+          <div className="row">
+            <div className="col-3">
+              <SideBar sideBarOptions={sideBarOptions} />
+            </div>
+            <div className="col-9">
+              <SearchComponent />
+              <Routes>
+                <Route
+                  index
+                  element={
+                    <PrivateRoute>
+                      <HomePage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="mis-etiquetas"
+                  element={
+                    <PrivateRoute>
+                      <TagsPage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="archivados"
+                  element={
+                    <PrivateRoute>
+                      <ArchivePage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="papelera"
+                  element={
+                    <PrivateRoute>
+                      <TrashPage />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </div>
           </div>
-          <div className="col-9">
-            <SearchComponent/>
-            <Routes>
-              <Route index element={<PrivateRoute>
-
-                <HomePage />
-              </PrivateRoute>
-              } />
-              <Route path="login" element={<Login />} />
-              <Route path="mis-etiquetas" element={<PrivateRoute>
-
-                <TagsPage />
-              </PrivateRoute>
-              } />
-              <Route path="archivados" element={
-                <PrivateRoute>
-
-                  <ArchivePage />
-                </PrivateRoute>
-              } />
-              <Route
-                path="papelera"
-                element={
-                  <PrivateRoute>
-                    <TrashPage />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </div>
-        </div>) : (<Login />)}
-
+        ) : (
+          <Login />
+        )}
       </div>
     </BrowserRouter>
   );
