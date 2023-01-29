@@ -11,9 +11,9 @@ export default function SideBar({ sideBarOptions }) {
   const user = authService.getCurrentUser();
   //render
   return (
-    <div className="">
-      <div className="row">
-        <div className="d-flex flex-column flex-shrink-0 p-2 text-bg-dark">
+    <div className="sidebar">
+      <div className="row" style={{ height: '100%' }}>
+        <div className="p-2 text-bg-dark" style={{ height: '100%' }}>
           <div className="col container">
             <a
               href="/"
@@ -23,11 +23,11 @@ export default function SideBar({ sideBarOptions }) {
             </a>
             <hr />
           </div>
-          <div className="row ">
-            <div className="col">
+          <div className="row" style={{ height: '80%' }}>
+            <div className="col pt-4">
               <ul className="nav nav-pills flex-column mb-auto">
                 {sideBarOptions.map((sideBarOption, index) => (
-                  <li className="nav-item" key={index}>
+                  <li className="nav-item py-1" key={index}>
                     <Link
                       className={
                         'nav-link ' + (sideBarOption.to === location.pathname ? 'active' : '')
@@ -39,30 +39,32 @@ export default function SideBar({ sideBarOptions }) {
                   </li>
                 ))}
               </ul>
-              <hr />
             </div>
           </div>
-          <div className="dropdown">
-            <button
-              className="d-flex align-items-center btn text-white dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="bi bi-person-circle"></i> &nbsp;
-              <strong>{user.usernameID}</strong>
-            </button>
-            <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => {
-                    dispatch(logout());
-                  }}
-                >
-                  Cerrar sesión
-                </button>
-              </li>
-            </ul>
+          <hr className="align-bottom" />
+          <div className="sidebar-user ">
+            <div className="dropdown">
+              <button
+                className="d-flex align-items-center btn text-white dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="bi bi-person-circle"></i> &nbsp;
+                <strong>{user.usernameID}</strong>
+              </button>
+              <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => {
+                      dispatch(logout());
+                    }}
+                  >
+                    Cerrar sesión
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
