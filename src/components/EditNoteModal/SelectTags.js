@@ -62,7 +62,7 @@ export default function SelectTags({ idNote, tagsInitial }) {
       <div className="my-3">
         {tagsSelected.map((tagSelect, index) => {
           return (
-            <span className="badge text-bg-primary mx-1" key={index}>
+            <span className="badge text-bg-dark mx-1" key={index}>
               {tagSelect.tags.nameTag}
               <button
                 className="btn-close btn-close-white"
@@ -72,8 +72,8 @@ export default function SelectTags({ idNote, tagsInitial }) {
           );
         })}
       </div>
-      <div className="">
-        <button className="btn btn-primary" onClick={handleTags}>
+      <div className="text-end">
+        <button className="btn btn-sm btn-primary" onClick={handleTags}>
           Confirmar cambios
         </button>
       </div>
