@@ -30,17 +30,19 @@ export default function RegisterModal() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleRegister = (data) => {
-    const user = {
-      username: data.username,
-      password: data.password,
+    if(data.username !== null && data.password !== null){
+      const user = {
+        username: data.username,
+        password: data.password,
+      }
+      api.post('user', {
+        username: user.username,
+        password: user.password
+      }).then((response) => {
+        console.log(response)
+        dispatch(login(user))
+      }).catch((error) => console.log(error));
     }
-    api.post('user', {
-      username: user.username,
-      password: user.password
-    }).then((response) => {
-      console.log(response)
-      dispatch(login(user))
-    }).catch((error) => console.log(error));
   };
 
   //render
@@ -56,12 +58,14 @@ export default function RegisterModal() {
         <Modal.Body>
           <form onSubmit={handleSubmit(handleRegister)}>
             <div className="mb-3">
-              <label className="form-label">Email</label>
+              <label className="form-label">Username</label>
               <input
                 type="text"
                 className="form-control"
                 {...register('username', { required: true })}
+
               />
+                <span className='badge text-bg-danger mt-3 mb-0'>{errors.username?.message}</span>
             </div>
             <div className="mb-3">
               <label className="form-label">Contraseña</label>
@@ -71,6 +75,7 @@ export default function RegisterModal() {
                 {...register('password', { required: true })}
               />
             </div>
+            <span className='badge text-bg-danger mt-3 mb-0'>{errors.password?.message}</span>
             <div className='text-end'>
               <button className='btn btn-primary'>Registrarme</button>
             </div>

@@ -59,12 +59,13 @@ export default function Login() {
                 <div className="mb-3">
                   <input type="text" className="form-control" placeholder="username"
                     {...register('username', { required: true })} />
-                  {errors.email && <span className="badge text-bg-danger">This field is required</span>}
+                  <span className='badge text-bg-danger mt-3 mb-0'>{errors.username?.message}</span>
                 </div>
                 <div className="mb-3">
                   <input type="password" className="form-control" placeholder="password"
                     {...register('password', { required: true })} />
-                  {errors.password && (<span className="badge text-bg-danger">This field is required</span>)}
+                  {/*errors.password && (<span className="badge text-bg-danger">This field is required</span>)*/}
+                  <span className='badge text-bg-danger mt-3 mb-0'>{errors.password?.message}</span>
                 </div>
               </div>
               <div className="botones mb-3">
