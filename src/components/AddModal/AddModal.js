@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { api } from "../../config/site.config";
-import AuthService from '../../config/auth.service';
 import AddEditorText from './AddEditorText';
 
 export default function AddModal() {
@@ -12,9 +10,7 @@ export default function AddModal() {
   const handleShow = () => setShow(true);
   
   /* Set Datos imput */
-  const [note, setNote] = useState({});
   const [noteTitle, setNoteTitle] = useState("");
-  const [noteContent, setNoteContent] = useState("");
 
   //render
   return (
@@ -31,7 +27,7 @@ export default function AddModal() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className='noteContent'>
-          <AddEditorText titleNote= {noteTitle} contentHTML={note.contentHTMLNote}></AddEditorText>
+          <AddEditorText titleNote= {noteTitle}></AddEditorText>
         </Modal.Body>
         <Modal.Footer>
           {/* add note and handleDesarchivar desactive */}

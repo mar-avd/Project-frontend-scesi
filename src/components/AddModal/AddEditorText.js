@@ -88,11 +88,13 @@ export default class AddEditorText extends React.Component {
                 conversionString += " " + element.text;
             });
 // Para guardar contenidos de la nota 
-        api.post('note', {titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => console.log(error));
+        if(this.props.titleNote !== '' || conversionString !== ' '){
+            api.post('note', {titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => console.log(error));
+        }
     };
 
     render() {
