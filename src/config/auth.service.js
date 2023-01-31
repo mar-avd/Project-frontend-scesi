@@ -25,7 +25,9 @@ class AuthService {
         console.log(response.data)
         return response.data;
       })
-      .catch((error) => error.response.data);
+      .catch((error) => {
+        console.log('Usuario incorrecto')
+        return error.response.data});
   }
   logout() {
     storageDelete('user');

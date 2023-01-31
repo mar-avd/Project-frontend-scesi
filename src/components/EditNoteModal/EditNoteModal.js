@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import RichEditorExample from './prueba/editorNote';
 import SelectTags from './SelectTags';
 
-export default function EditNoteModal({ idNote }) {
+export default function EditNoteModal({ idNote, type }) {
   //states
   const [show, setShow] = useState(false);
   const [note, setNote] = useState({});
@@ -52,7 +52,7 @@ export default function EditNoteModal({ idNote }) {
   //render
   return (
     <>
-      <Button variant="btn dropdown-item" onClick={handleShow}>
+      <Button variant={type} onClick={handleShow}>
         Editar
       </Button>
       <Modal show={show} onHide={handleClose}>

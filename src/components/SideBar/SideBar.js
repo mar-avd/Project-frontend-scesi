@@ -12,8 +12,8 @@ export default function SideBar({ sideBarOptions }) {
   //render
   return (
     <div className="sidebar">
-      <div className="row" style={{ height: '100%' }}>
-        <div className="p-2 text-bg-dark" style={{ height: '100%' }}>
+      <div className="row">
+        <div className="p-2 text-bg-dark">
           <div className="col container">
             <a
               href="/"
@@ -23,7 +23,7 @@ export default function SideBar({ sideBarOptions }) {
             </a>
             <hr />
           </div>
-          <div className="row" style={{ height: '80%' }}>
+          <div className="row">
             <div className="col pt-4">
               <ul className="nav nav-pills flex-column mb-auto">
                 {sideBarOptions.map((sideBarOption, index) => (
