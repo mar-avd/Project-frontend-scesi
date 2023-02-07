@@ -1,12 +1,12 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import '../prueba/RichEditor.css'
-import AuthService from '../../../config/auth.service';
-import { api } from "../../../config/site.config";
+import '../../assets/css/RichEditor.css'
+import AuthService from '../../config/auth.service';
+import { api } from "../../config/site.config";
 
 
-export default class RichEditorExample extends React.Component {
+export default class SetEditorText extends React.Component {
     constructor(props) {
         super(props);
 
@@ -110,7 +110,7 @@ export default class RichEditorExample extends React.Component {
     }
 
     // Para actualizar los contentHTML de mi nota 
-    getConversion(editorState) {
+    setContentNote(editorState) {
         const user = AuthService.getCurrentUser();
         const config = {
             headers: { Authorization: `Bearer ${user.token}` },
@@ -118,11 +118,12 @@ export default class RichEditorExample extends React.Component {
 
         const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-        let conversionString = "";
+        let conversionString = '';
         convertToRaw(editorState.getCurrentContent())
             .blocks.forEach(element => {
-                conversionString += " " + element.text;
+                conversionString += "" + element.text;
             });
+        conversionString = conversionString.trim();
         // guarda la nota editada
         let refreshNoteTitle = () => {
             if (this.props.noteTitle === "") {
@@ -135,16 +136,20 @@ export default class RichEditorExample extends React.Component {
             }
         }
 
-        api.patch(`note?noteID=${this.props.noteID}`, {
-            titleNote: refreshNoteTitle(),
-            contentNote: conversionString,
-            contentHTMLNote: conversionHTML
-        }, config)
-            .then((response) => {
-                window.location.reload();
-                console.log(response);
-            })
-            .catch((error) => console.log(error));
+        if (conversionString.length <= 7000) {
+            api.patch(`note?noteID=${this.props.noteID}`, {
+                titleNote: refreshNoteTitle(),
+                contentNote: conversionString,
+                contentHTMLNote: conversionHTML
+            }, config)
+                .then((response) => {
+                    window.location.reload();
+                    console.log(response);
+                })
+                .catch((error) => console.log(error));
+        } else {
+            console.log('Excediste los 7000 caracteres, prueba a eliminar algunos');
+        }
     };
 
     render() {
@@ -190,7 +195,7 @@ export default class RichEditorExample extends React.Component {
                         <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i className="bi bi-clipboard"></i></button>
                     </div>
                     <div className='text-end'>
-                        <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Guardar cambios</button>
+                        <button className='btn btn-primary' onClick={() => { this.setContentNote(editorState) }}>Guardar cambios</button>
                     </div>
                 </div>
 
@@ -234,23 +239,23 @@ class StyleButton extends React.Component {
 
         return (
             <span className={className} onMouseDown={this.onToggle}>
-                {this.props.label}
+                <i className={this.props.label}></i>
             </span>
         );
     }
 }
 
 const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
-    { label: 'H4', style: 'header-four' },
-    { label: 'H5', style: 'header-five' },
-    { label: 'H6', style: 'header-six' },
-    { label: 'Blockquote', style: 'blockquote' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
-    { label: 'Code Block', style: 'code-block' },
+    { label: 'bi bi-type-h1', style: 'header-one' },
+    { label: 'bi bi-type-h2', style: 'header-two' },
+    { label: 'bi bi-type-h3', style: 'header-three' },
+    // { label: 'H4', style: 'header-four' },
+    // { label: 'H5', style: 'header-five' },
+    // { label: 'H6', style: 'header-six' },
+    // { label: 'Blockquote', style: 'blockquote' },
+    { label: 'bi bi-list-ul', style: 'unordered-list-item' },
+    { label: 'bi bi-list-ol', style: 'ordered-list-item' },
+    // { label: 'Code Block', style: 'code-block' },
 ];
 
 const BlockStyleControls = (props) => {
@@ -277,9 +282,9 @@ const BlockStyleControls = (props) => {
 };
 
 var INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
+    { label: 'bi bi-type-bold', style: 'BOLD' },
+    { label: 'bi bi-type-italic', style: 'ITALIC' },
+    { label: 'bi bi-type-underline', style: 'UNDERLINE' },
     { label: 'Monospace', style: 'CODE' },
 ];
 

@@ -1,4 +1,4 @@
-import AddModal from '../../components/AddModal/AddModal';
+import AddNoteModal from '../../components/AddNoteModal/AddNoteModal';
 import { useEffect, useState } from 'react';
 import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
@@ -36,7 +36,7 @@ export default function HomePage() {
       <div className="row justify-content-end py-3">
         <div className="col-2">
           <div className="text-end">
-            <AddModal />
+            <AddNoteModal />
           </div>
         </div>
       </div>

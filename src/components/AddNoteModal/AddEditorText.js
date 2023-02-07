@@ -1,7 +1,7 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import '../EditNoteModal/prueba/RichEditor.css'
+import '../../assets/css/RichEditor.css'
 import AuthService from '../../config/auth.service';
 import { api } from "../../config/site.config";
 
@@ -73,7 +73,7 @@ export default class AddEditorText extends React.Component {
     }
 
     // Para convertir html a cadena
-    getConversion(editorState) {
+    addNewNote(editorState) {
 
         const user = AuthService.getCurrentUser();
         const config = {
@@ -82,17 +82,22 @@ export default class AddEditorText extends React.Component {
 
         const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-        let conversionString = "";
+        let conversionString = '';
         convertToRaw(editorState.getCurrentContent())
             .blocks.forEach(element => {
-                conversionString += " " + element.text;
+                conversionString += element.text + ' ';
             });
-// Para guardar contenidos de la nota 
-        api.post('note', {titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => console.log(error));
+        conversionString = conversionString.trim();
+        // Para guardar contenidos de la nota
+        if (conversionString.length <= 7000) {
+            api.post('note', { titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => console.log(error));
+        } else {
+            console.log('Excediste los 7000 caracteres, prueba a eliminar algunos');
+        }
     };
 
     render() {
@@ -127,14 +132,14 @@ export default class AddEditorText extends React.Component {
                             handleKeyCommand={this.handleKeyCommand}
                             keyBindingFn={this.mapKeyToEditorCommand}
                             onChange={this.onChange}
-                            placeholder ="Escribe tu nota aqui..."
+                            placeholder="Escribe tu nota aqui..."
                             ref={this.focus}
                             spellCheck={true}
                         />
                     </div>
                 </div>
                 <div className='py-3 text-end'>
-                    <button className='btn btn-primary' onClick={() => { this.getConversion(editorState) }}>Agregar</button>
+                    <button className='btn btn-primary' onClick={() => { this.addNewNote(editorState) }}>Agregar</button>
                 </div>
             </div>
         );
@@ -175,23 +180,23 @@ class StyleButton extends React.Component {
 
         return (
             <span className={className} onMouseDown={this.onToggle}>
-                {this.props.label}
+                <i className={this.props.label}></i>
             </span>
         );
     }
 }
 
 const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
-    { label: 'H4', style: 'header-four' },
-    { label: 'H5', style: 'header-five' },
-    { label: 'H6', style: 'header-six' },
-    { label: 'Blockquote', style: 'blockquote' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
-    { label: 'Code Block', style: 'code-block' },
+    { label: 'bi bi-type-h1', style: 'header-one' },
+    { label: 'bi bi-type-h2', style: 'header-two' },
+    { label: 'bi bi-type-h3', style: 'header-three' },
+    // { label: 'H4', style: 'header-four' },
+    // { label: 'H5', style: 'header-five' },
+    // { label: 'H6', style: 'header-six' },
+    // { label: 'Blockquote', style: 'blockquote' },
+    { label: 'bi bi-list-ul', style: 'unordered-list-item' },
+    { label: 'bi bi-list-ol', style: 'ordered-list-item' },
+    // { label: 'Code Block', style: 'code-block' },
 ];
 
 const BlockStyleControls = (props) => {
@@ -218,9 +223,9 @@ const BlockStyleControls = (props) => {
 };
 
 var INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
+    { label: 'bi bi-type-bold', style: 'BOLD' },
+    { label: 'bi bi-type-italic', style: 'ITALIC' },
+    { label: 'bi bi-type-underline', style: 'UNDERLINE' },
     { label: 'Monospace', style: 'CODE' },
 ];
 
