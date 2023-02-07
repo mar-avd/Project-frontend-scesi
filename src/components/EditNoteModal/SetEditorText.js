@@ -1,5 +1,13 @@
 import React from 'react';
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import {
+    Editor,
+    EditorState,
+    RichUtils,
+    getDefaultKeyBinding,
+    ContentState,
+    convertFromHTML,
+    convertToRaw,
+} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import '../../assets/css/RichEditor.css'
 import AuthService from '../../config/auth.service';
@@ -10,8 +18,12 @@ export default class SetEditorText extends React.Component {
     constructor(props) {
         super(props);
 
-        this.content = "";
-        this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
+        this.content = '';
+        this.state = {
+            editorState: EditorState.createWithContent(
+                ContentState.createFromBlockArray(convertFromHTML(this.content)),
+            ),
+        };
         this.noteID = this.props;
 
         this.focus = React.createRef();
@@ -150,16 +162,164 @@ export default class SetEditorText extends React.Component {
         } else {
             console.log('Excediste los 7000 caracteres, prueba a eliminar algunos');
         }
-    };
+
+        api
+            .get(`note/oneNote?noteID=${this.props.noteID} `, config)
+            .then((response) => {
+                this.setState({
+                    editorState: EditorState.createWithContent(
+                        ContentState.createFromBlockArray(convertFromHTML(response.data.contentHTMLNote)),
+                    ),
+                });
+            })
+            .catch((error) => console.log(error));
+    }
+
+    _handleKeyCommand(command, editorState) {
+        const newState = RichUtils.handleKeyCommand(editorState, command);
+        if (newState) {
+            console.log('Shorcut', newState); // Cuando usamos un shortcut
+
+            return (
+                <div className="RichEditor-root">
+                    <div>
+                        <BlockStyleControls
+                            editorState={editorState}
+                            onToggle={this.toggleBlockType}
+                        />
+                        <InlineStyleControls
+                            editorState={editorState}
+                            onToggle={this.toggleInlineStyle}
+                        />
+                        <div className={className} /* onClick={this.focus} */>
+                            <Editor
+                                blockStyleFn={getBlockStyle}
+                                customStyleMap={styleMap}
+                                editorState={editorState}
+                                handleKeyCommand={this.handleKeyCommand}
+                                keyBindingFn={this.mapKeyToEditorCommand}
+                                onChange={this.onChange}
+                                placeholder="Escribe tu nota"
+                                ref={this.focus}
+                                spellCheck={true}
+                            />
+                        </div>
+                    </div>
+                    <div className='py-3'>
+                        <div className='text-start'>
+                            <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i className="bi bi-clipboard"></i></button>
+                        </div>
+                        <div className='text-end'>
+                            <button className='btn btn-primary' onClick={() => { this.setContentNote(editorState) }}>Guardar cambios</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            );
+        }
+        return false;
+    }
+
+    _mapKeyToEditorCommand(e) {
+        if (e.keyCode === 9) {
+            //TAB
+            console.log('TAB', e); //Cuando pulso el TAB
+            const newEditorState = RichUtils.onTab(
+                e,
+                this.state.editorState,
+                4, // maxDepth
+            );
+            if (newEditorState !== this.state.editorState) {
+                this.onChange(newEditorState);
+            }
+            return;
+        }
+        return getDefaultKeyBinding(e);
+    }
+
+    _toggleBlockType(blockType) {
+        console.log('Blocktype', blockType); // Usamos los H1, H2, etc
+        this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
+    }
+
+    _toggleInlineStyle(inlineStyle) {
+        console.log(inlineStyle); //Los estilos de texto
+        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+    }
+
+    getContentHTML() {
+        const user = AuthService.getCurrentUser();
+        const config = {
+            headers: { Authorization: `Bearer ${user.token} ` },
+        };
+
+        api
+            .get(`note/oneNote?noteID=${this.props.noteID}`, config)
+            .then((response) => {
+                const data = response.data.contentHTMLNote;
+                return data;
+            })
+            .catch((error) => console.log(error));
+    }
+
+    copyToClipboard(editorState) {
+        const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText)
+            return navigator.clipboard.writeText(conversionHTML);
+        return Promise.reject('The Clipboard API is not available.');
+    }
+
+    // Para actualizar los contentHTML de mi nota
+    getConversion(editorState) {
+        const user = AuthService.getCurrentUser();
+        const config = {
+            headers: { Authorization: `Bearer ${user.token} ` },
+        };
+
+        const conversionHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+
+        let conversionString = '';
+        convertToRaw(editorState.getCurrentContent()).blocks.forEach((element) => {
+            conversionString += ' ' + element.text;
+        });
+        // guarda la nota editada
+        let refreshNoteTitle = () => {
+            if (this.props.noteTitle === '') {
+                api.get(`note / oneNote ? noteID = ${this.props.noteID} `, config).then((response) => {
+                    return response.data.titleNote;
+                });
+            } else {
+                return this.props.noteTitle;
+            }
+        };
+
+        api
+            .patch(
+                `note ? noteID = ${this.props.noteID} `,
+                {
+                    titleNote: refreshNoteTitle(),
+                    contentNote: conversionString,
+                    contentHTMLNote: conversionHTML,
+                },
+                config,
+            )
+            .then((response) => {
+                window.location.reload();
+                console.log(response);
+            })
+            .catch((error) => console.log(error));
+    }
 
     render() {
         const { editorState } = this.state;
 
-        // Si el usuario cambia el tipo de bloque antes de introducir cualquier texto, podemos aplicar estilo 
+        // Si el usuario cambia el tipo de bloque antes de introducir cualquier texto, podemos aplicar estilo
         // al marcador de posición u ocultarlo. Vamos a ocultarlo ahora.
         let className = 'RichEditor-editor';
         var contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) { //Verificamos si hay contenido
+        if (!contentState.hasText()) {
+            //Verificamos si hay contenido
             if (contentState.getBlockMap().first().getType() !== 'unstyled') {
                 className += ' RichEditor-hidePlaceholder';
             }
@@ -168,15 +328,19 @@ export default class SetEditorText extends React.Component {
         return (
             <div className="RichEditor-root">
                 <div>
-                    <BlockStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleBlockType}
-                    />
-                    <InlineStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleInlineStyle}
-                    />
+                    <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
+                    <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle} />
                     <div className={className} /* onClick={this.focus} */>
+                        <div className="float-end pt-2">
+                            <button
+                                className="btn btn-sm btn-secondary"
+                                onClick={() => {
+                                    this.copyToClipboard(editorState);
+                                }}
+                            >
+                                <i className="bi bi-clipboard"></i>
+                            </button>
+                        </div>
                         <Editor
                             blockStyleFn={getBlockStyle}
                             customStyleMap={styleMap}
@@ -190,16 +354,18 @@ export default class SetEditorText extends React.Component {
                         />
                     </div>
                 </div>
-                <div className='py-3'>
-                    <div className='text-start'>
-                        <button className='btn btn-secondary' onClick={() => { this.copyToClipboard(editorState) }}><i className="bi bi-clipboard"></i></button>
-                    </div>
-                    <div className='text-end'>
-                        <button className='btn btn-primary' onClick={() => { this.setContentNote(editorState) }}>Guardar cambios</button>
+                <div className="py-3">
+                    <div className="text-end">
+                        <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => {
+                                this.getConversion(editorState);
+                            }}
+                        >
+                            Guardar cambios
+                        </button>
                     </div>
                 </div>
-
-
             </div>
         );
     }
@@ -217,8 +383,10 @@ const styleMap = {
 
 function getBlockStyle(block) {
     switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
+        case 'blockquote':
+            return 'RichEditor-blockquote';
+        default:
+            return null;
     }
 }
 
@@ -230,6 +398,8 @@ class StyleButton extends React.Component {
             this.props.onToggle(this.props.style);
         };
     }
+
+
 
     render() {
         let className = 'RichEditor-styleButton';
@@ -268,7 +438,7 @@ const BlockStyleControls = (props) => {
 
     return (
         <div className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
+            {BLOCK_TYPES.map((type) => (
                 <StyleButton
                     key={type.label}
                     active={type.style === blockType}
@@ -276,7 +446,7 @@ const BlockStyleControls = (props) => {
                     onToggle={props.onToggle}
                     style={type.style}
                 />
-            )}
+            ))}
         </div>
     );
 };
@@ -293,7 +463,7 @@ const InlineStyleControls = (props) => {
 
     return (
         <div className="RichEditor-controls">
-            {INLINE_STYLES.map((type) =>
+            {INLINE_STYLES.map((type) => (
                 <StyleButton
                     key={type.label}
                     active={currentStyle.has(type.style)}
@@ -301,7 +471,7 @@ const InlineStyleControls = (props) => {
                     onToggle={props.onToggle}
                     style={type.style}
                 />
-            )}
+            ))}
         </div>
     );
 };

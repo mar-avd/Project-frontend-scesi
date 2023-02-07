@@ -63,7 +63,7 @@ export default function NoteCard({ note }) {
                 <NoteModal idNote={note.noteID} />
               </li>
               <li>
-                <EditNoteModal idNote={note.noteID} />
+                <EditNoteModal idNote={note.noteID} type={'btn dropdown-item'}/>
               </li>
               <li>
                 {note.statusNote === 'importante' ? (

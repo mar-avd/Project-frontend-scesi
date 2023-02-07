@@ -10,7 +10,6 @@ export default function AddNoteModal() {
   const handleShow = () => setShow(true);
 
   /* Set Datos imput */
-  const [note] = useState({});
   const [noteTitle, setNoteTitle] = useState("");
 
   //render
@@ -28,7 +27,7 @@ export default function AddNoteModal() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className='noteContent'>
-          <AddEditorText titleNote={noteTitle} contentHTML={note.contentHTMLNote}></AddEditorText>
+          <AddEditorText titleNote= {noteTitle}></AddEditorText>
         </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>

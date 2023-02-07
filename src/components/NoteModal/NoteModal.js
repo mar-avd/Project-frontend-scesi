@@ -5,6 +5,8 @@ import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import moment from 'moment/moment';
 import 'moment/locale/es';
+import DeleteNoteModal from '../DeleteNoteModal/DeleteNoteModal';
+import EditNoteModal from '../EditNoteModal/EditNoteModal';
 
 export default function NoteModal({ idNote }) {
   moment.locale('es');
@@ -39,6 +41,15 @@ export default function NoteModal({ idNote }) {
     loadTags();
     setShow(true);
   };
+  const handleDelete =() => {
+    api
+      .patch('note?noteID=' + idNote, { statusNote: 'papelera' }, config)
+      .then((response) => {
+        setTimeout(() => { window.location.reload() }, 3000);
+        // navigate('/papelera');
+      })
+      .catch((error) => console.log(error));
+  }
   //render
   return (
     <>
@@ -60,7 +71,7 @@ export default function NoteModal({ idNote }) {
         </Modal.Body>
         <Modal.Footer>
           <div className="row justify-content-between">
-            <div className="col">
+            <div className="col-12">
               <small className="">
                 <p>
                   Ultima modificación &nbsp;
@@ -69,12 +80,8 @@ export default function NoteModal({ idNote }) {
               </small>
             </div>
             <div className="col text-end">
-              <Button variant="secondary" size="sm" onClick={handleClose}>
-                Eliminar
-              </Button>
-              <Button variant="primary" size="sm" onClick={handleClose}>
-                Editar
-              </Button>
+              <button className='btn btn-secondary' onClick={handleDelete}>Eliminar</button>
+              <EditNoteModal idNote={idNote} type={'primary'}/>
             </div>
           </div>
         </Modal.Footer>
