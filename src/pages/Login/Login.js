@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import RegisterModal from '../../components/RegisterModal/RegisterModal';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import './Login.css';
 
 const schema = yup
@@ -23,17 +22,16 @@ export default function Login() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const [errores, setErrores] = useState(<></>)
   const { login } = authAction;
-  let navigate = useNavigate();
   //redux
   const isLoggedIn = useSelector((state) => state.Auth.idToken);
   const dispatch = useDispatch()
-  //effects
-  useEffect(() => {
-    if (isLoggedIn) {
-      return navigate('/archivados')
-    }
-  }, [isLoggedIn, navigate])
+  const error = () => {
+    setErrores(<div className='badge text-bg-danger mt-3 mb-0'>Credenciales no válidas, usuario o contraseña incorrectas</div>)
+    setTimeout(() => setErrores(<></>), 3500)
+  }
+  
   //handlers
   const handleLogin = (data) => {
     const user = {
@@ -45,6 +43,9 @@ export default function Login() {
 
     } else {
       dispatch((login()))
+    }
+    if(!isLoggedIn){
+      setTimeout(() => error(), 400)
     }
   };
 
@@ -76,6 +77,7 @@ export default function Login() {
                   <button className="BotonLogin large">Login</button>
                 </div>
               </div>
+              {errores}
             </div>
           </div>
         </div>

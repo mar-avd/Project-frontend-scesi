@@ -5,8 +5,7 @@ import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import moment from 'moment/moment';
 import 'moment/locale/es';
-import DeleteNoteModal from '../DeleteNoteModal/DeleteNoteModal';
-import EditNoteModal from '../EditNoteModal/EditNoteModal';
+//import EditNoteModal from '../EditNoteModal/EditNoteModal';
 
 export default function NoteModal({ idNote }) {
   moment.locale('es');
@@ -41,7 +40,7 @@ export default function NoteModal({ idNote }) {
     loadTags();
     setShow(true);
   };
-  const handleDelete =() => {
+  /*const handleDelete =() => {
     api
       .patch('note?noteID=' + idNote, { statusNote: 'papelera' }, config)
       .then((response) => {
@@ -49,7 +48,7 @@ export default function NoteModal({ idNote }) {
         // navigate('/papelera');
       })
       .catch((error) => console.log(error));
-  }
+  }*/
   //render
   return (
     <>
@@ -78,10 +77,6 @@ export default function NoteModal({ idNote }) {
                   {moment(note.modificationDate).format('llll')}
                 </p>
               </small>
-            </div>
-            <div className="col text-end">
-              <button className='btn btn-secondary' onClick={handleDelete}>Eliminar</button>
-              <EditNoteModal idNote={idNote} type={'primary'}/>
             </div>
           </div>
         </Modal.Footer>
