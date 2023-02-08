@@ -11,7 +11,11 @@ export default class AddEditorText extends React.Component {
         super(props);
 
         this.content = "";
-        this.state = { editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))) };
+        this.state = {
+            editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))),
+            notificacionExceso: false,
+            notificacionVacio: false,
+        };
         this.titleNote = this.props;
 
         this.focus = React.createRef();
@@ -36,12 +40,11 @@ export default class AddEditorText extends React.Component {
 
     _mapKeyToEditorCommand(e) {
 
-        if (e.keyCode === 9) { //TAB
-            console.log('TAB', e); //Cuando pulso el TAB
+        if (e.keyCode === 9) {
             const newEditorState = RichUtils.onTab(
                 e,
                 this.state.editorState,
-                4, // maxDepth 
+                4,
             );
             if (newEditorState !== this.state.editorState) {
                 this.onChange(newEditorState);
@@ -52,8 +55,6 @@ export default class AddEditorText extends React.Component {
     }
 
     _toggleBlockType(blockType) {
-
-        console.log('Blocktype', blockType); // Usamos los H1, H2, etc
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -63,7 +64,6 @@ export default class AddEditorText extends React.Component {
     }
 
     _toggleInlineStyle(inlineStyle) {
-        console.log(inlineStyle) //Los estilos de texto
         this.onChange(
             RichUtils.toggleInlineStyle(
                 this.state.editorState,
@@ -72,7 +72,6 @@ export default class AddEditorText extends React.Component {
         );
     }
 
-    // Para convertir html a cadena
     addNewNote(editorState) {
 
         const user = AuthService.getCurrentUser();
@@ -89,19 +88,25 @@ export default class AddEditorText extends React.Component {
             });
         conversionString = conversionString.trim();
         // Para guardar contenidos de la nota
-        if (conversionString.length <= 7000) {
-            api.post('note', { titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
-                .then((response) => {
-                    window.location.reload();
-                })
-                .catch((error) => console.log(error));
+        if (this.props.titleNote !== '' || conversionString !== '') {
+            if (conversionString.length <= 3000) {
+                api.post('note', { titleNote: this.props.titleNote, contentNote: conversionString, contentHTMLNote: conversionHTML }, config)
+                    .then((response) => {
+                        window.location.reload();
+                    })
+                    .catch((error) => console.log(error));
+            } else {
+                this.state.notificacionExceso = true;
+                setTimeout(() => { this.state.notificacionExceso = false }, 3500);
+            }
         } else {
-            console.log('Excediste los 7000 caracteres, prueba a eliminar algunos');
+            this.state.notificacionVacio = true;
+            setTimeout(() => { this.state.notificacionVacio = false }, 3500);
         }
     };
 
     render() {
-        const { editorState } = this.state;
+        const { editorState, notificacionExceso, notificacionVacio } = this.state;
 
         // Si el usuario cambia el tipo de bloque antes de introducir cualquier texto, podemos aplicar estilo 
         // al marcador de posición u ocultarlo. Vamos a ocultarlo ahora.
@@ -116,13 +121,9 @@ export default class AddEditorText extends React.Component {
         return (
             <div className="RichEditor-root">
                 <div>
-                    <BlockStyleControls
+                    <BlockAndInlineStyleControls
                         editorState={editorState}
                         onToggle={this.toggleBlockType}
-                    />
-                    <InlineStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleInlineStyle}
                     />
                     <div className={className} /* onClick={this.focus} */>
                         <Editor
@@ -132,7 +133,7 @@ export default class AddEditorText extends React.Component {
                             handleKeyCommand={this.handleKeyCommand}
                             keyBindingFn={this.mapKeyToEditorCommand}
                             onChange={this.onChange}
-                            placeholder="Escribe tu nota aqui..."
+                            placeholder="Escribe tu nota aquí ..."
                             ref={this.focus}
                             spellCheck={true}
                         />
@@ -141,6 +142,12 @@ export default class AddEditorText extends React.Component {
                 <div className='py-3 text-end'>
                     <button className='btn btn-primary' onClick={() => { this.addNewNote(editorState) }}>Agregar</button>
                 </div>
+                {notificacionExceso
+                    ? <div className='badge text-bg-danger d-flex justify-content-center' style={{ fontSize: '1rem' }}>Excediste los 3000 caracteres permitidos</div>
+                    : null}
+                {notificacionVacio
+                    ? <div className='badge text-bg-danger d-flex justify-content-center' style={{ fontSize: '1rem' }}>No puedes crear una nota sin título o contenido</div>
+                    : null}
             </div>
         );
     }
@@ -187,25 +194,27 @@ class StyleButton extends React.Component {
 }
 
 const BLOCK_TYPES = [
-    { label: 'bi bi-type-h1', style: 'header-one' },
-    { label: 'bi bi-type-h2', style: 'header-two' },
-    { label: 'bi bi-type-h3', style: 'header-three' },
-    // { label: 'H4', style: 'header-four' },
-    // { label: 'H5', style: 'header-five' },
-    // { label: 'H6', style: 'header-six' },
-    // { label: 'Blockquote', style: 'blockquote' },
+    { label: 'bi bi-fonts H1', style: 'header-one' },
+    { label: 'bi bi-fonts H2', style: 'header-two' },
+    { label: 'bi bi-fonts H3', style: 'header-three' },
     { label: 'bi bi-list-ul', style: 'unordered-list-item' },
     { label: 'bi bi-list-ol', style: 'ordered-list-item' },
-    // { label: 'Code Block', style: 'code-block' },
 ];
 
-const BlockStyleControls = (props) => {
+var INLINE_STYLES = [
+    { label: 'bi bi-type-bold', style: 'BOLD' },
+    { label: 'bi bi-type-italic', style: 'ITALIC' },
+    { label: 'bi bi-type-underline', style: 'UNDERLINE' },
+];
+
+const BlockAndInlineStyleControls = (props) => {
     const { editorState } = props;
     const selection = editorState.getSelection();
     const blockType = editorState
         .getCurrentContent()
         .getBlockForKey(selection.getStartKey())
         .getType();
+    const currentStyle = props.editorState.getCurrentInlineStyle();
 
     return (
         <div className="RichEditor-controls">
@@ -218,22 +227,6 @@ const BlockStyleControls = (props) => {
                     style={type.style}
                 />
             )}
-        </div>
-    );
-};
-
-var INLINE_STYLES = [
-    { label: 'bi bi-type-bold', style: 'BOLD' },
-    { label: 'bi bi-type-italic', style: 'ITALIC' },
-    { label: 'bi bi-type-underline', style: 'UNDERLINE' },
-    { label: 'Monospace', style: 'CODE' },
-];
-
-const InlineStyleControls = (props) => {
-    const currentStyle = props.editorState.getCurrentInlineStyle();
-
-    return (
-        <div className="RichEditor-controls">
             {INLINE_STYLES.map((type) =>
                 <StyleButton
                     key={type.label}

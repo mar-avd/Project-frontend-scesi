@@ -4,7 +4,7 @@ import { api } from '../../config/site.config';
 import AuthService from '../../config/auth.service';
 import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
-import RichEditorExample from './prueba/editorNote';
+import SetEditorText from './SetEditorText';
 import SelectTags from './SelectTags';
 
 export default function EditNoteModal({ idNote, type }) {
@@ -68,11 +68,11 @@ export default function EditNoteModal({ idNote, type }) {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <RichEditorExample
+            <SetEditorText
               noteTitle={noteTitle}
               noteID={idNote}
               contentHTML={note.contentHTMLNote}
-            ></RichEditorExample>
+            ></SetEditorText>
           </div>
           <SelectTags idNote={idNote} tagsInitial={tagsNote}></SelectTags>
         </Modal.Body>
