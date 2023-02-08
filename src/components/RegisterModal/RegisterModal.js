@@ -39,7 +39,6 @@ export default function RegisterModal() {
         username: user.username,
         password: user.password
       }).then((response) => {
-        console.log(response)
         dispatch(login(user))
       }).catch((error) => console.log(error));
     }
