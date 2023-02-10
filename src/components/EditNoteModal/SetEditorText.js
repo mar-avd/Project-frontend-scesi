@@ -13,7 +13,8 @@ export default class SetEditorText extends React.Component {
         this.content = "";
         this.state = {
             editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(this.content))),
-            notificacionExceso: false
+            notificacionExceso: false,
+            notificacionClipboard: false,
         };
         this.noteID = this.props;
 
@@ -146,12 +147,12 @@ export default class SetEditorText extends React.Component {
                 .catch((error) => console.log(error));
         } else {
             this.state.notificacionExceso = true;
-            setTimeout(() => { this.state.notificacionExceso = false}, 3500);
+            setTimeout(() => { this.state.notificacionExceso = false }, 3500);
         }
     };
 
     render() {
-        const { editorState, notificacionExceso } = this.state;
+        const { editorState, notificacionExceso, notificacionClipboard } = this.state;
 
         // Si el usuario cambia el tipo de bloque antes de introducir cualquier texto, podemos aplicar estilo 
         // al marcador de posición u ocultarlo. Vamos a ocultarlo ahora.
@@ -165,6 +166,9 @@ export default class SetEditorText extends React.Component {
 
         return (
             <div className="RichEditor-root">
+                {notificacionClipboard
+                    ? <div className='badge text-bg-primary d-flex justify-content-center' style={{ fontSize: '0.9rem' }}>Copiaste el HTML, uso para desarrolladores</div>
+                    : null}
                 <div>
                     <BlockAndInlineStyleControls editorState={editorState} onToggle={this.toggleBlockType} />
                     <div className={className} /* onClick={this.focus} */>
@@ -173,6 +177,8 @@ export default class SetEditorText extends React.Component {
                                 className="btn btn-sm btn-secondary"
                                 onClick={() => {
                                     this.copyToClipboard(editorState);
+                                    this.state.notificacionClipboard = true;
+                                    setTimeout(() => { this.state.notificacionClipboard = false }, 3500);
                                 }}
                             >
                                 <i className="bi bi-clipboard"></i>
@@ -204,7 +210,7 @@ export default class SetEditorText extends React.Component {
                     </div>
                 </div>
                 {notificacionExceso
-                    ? <div className='badge text-bg-danger d-flex justify-content-center' style={{fontSize: '1rem'}}>Excediste los 3000 caracteres permitidos</div>
+                    ? <div className='badge text-bg-danger d-flex justify-content-center' style={{ fontSize: '1rem' }}>Excediste los 3000 caracteres permitidos</div>
                     : null}
             </div>
         );

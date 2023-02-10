@@ -48,7 +48,7 @@ export default function RegisterModal() {
   return (
     <span className="">
       <Button className='BotonSignUp' variant='secondary' onClick={handleShow}>
-        Sign Up
+        Registrarse
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -57,7 +57,7 @@ export default function RegisterModal() {
         <Modal.Body>
           <form onSubmit={handleSubmit(handleRegister)}>
             <div className="mb-3">
-              <label className="form-label">Username</label>
+              <label className="form-label">Nombre de usuario</label>
               <input
                 type="text"
                 className="form-control"

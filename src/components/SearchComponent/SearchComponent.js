@@ -66,7 +66,7 @@ export default function SearchComponent() {
               <input
                 className="form-control me-2"
                 type="search"
-                placeholder="Search"
+                placeholder="Buscar"
                 aria-label="Search"
                 value={searchInput}
                 onChange={(e) => {
@@ -74,7 +74,7 @@ export default function SearchComponent() {
                 }}
               />
               <button className="btn btn-outline-primary" onClick={handlerSearch}>
-                Search
+                Buscar
               </button>
             </div>
           </div>

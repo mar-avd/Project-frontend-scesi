@@ -50,7 +50,7 @@ export default function SelectTags({ idNote, tagsInitial }) {
     <div>
       <h4>Cambiar etiquetas:</h4>
       <select className="form-select" onChange={(e) => addTag(e.target.value)}>
-        <option defaultValue={'selecciona los tags'}>Selecciona los tags</option>
+        <option defaultValue={'selecciona los tags'}>Selecciona las etiquetas</option>
         {tags.map((tag, index) => {
           return (
             <option value={tag.tagID} key={index}>

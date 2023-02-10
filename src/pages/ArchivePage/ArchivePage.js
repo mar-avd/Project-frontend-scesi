@@ -46,7 +46,7 @@ export default function ArchivePage() {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Titulo</th>
-            <th scope="col">Overview</th>
+            <th scope="col">Vista previa</th>
             <th scope="col">Fecha de creación</th>
             <th scope="col">Ultima modificación</th>
             <th scope="col">

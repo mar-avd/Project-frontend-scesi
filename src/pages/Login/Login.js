@@ -58,12 +58,12 @@ export default function Login() {
               <h3 className="titulo">MaiwaNote</h3>
               <div className="entradas">
                 <div className="mb-3">
-                  <input type="text" className="form-control" placeholder="username"
+                  <input type="text" className="form-control" placeholder="Nombre de usuario"
                     {...register('username', { required: true })} />
                   <span className='badge text-bg-danger mt-3 mb-0'>{errors.username?.message}</span>
                 </div>
                 <div className="mb-3">
-                  <input type="password" className="form-control" placeholder="password"
+                  <input type="password" className="form-control" placeholder="Contraseña"
                     {...register('password', { required: true })} />
                   {/*errors.password && (<span className="badge text-bg-danger">This field is required</span>)*/}
                   <span className='badge text-bg-danger mt-3 mb-0'>{errors.password?.message}</span>
@@ -74,7 +74,7 @@ export default function Login() {
                   <RegisterModal className='BotonSignUp large'></RegisterModal>
                 </div>
                 <div className="d-grid gap-2 d-md-block text-center">
-                  <button className="BotonLogin large">Login</button>
+                  <button className="BotonLogin large">Iniciar sesión</button>
                 </div>
               </div>
               {errores}
